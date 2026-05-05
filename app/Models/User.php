@@ -1,0 +1,60 @@
+<?php
+
+namespace App\Models;
+
+use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+
+#[Fillable(['name', 'email', 'password', 'role', 'full_name', 'phone', 'player_id', 'coach_id', 'team_id', 'google_id'])]
+#[Hidden(['password', 'remember_token'])]
+class User extends Authenticatable
+{
+    use HasFactory, Notifiable;
+
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
+    }
+
+    public function isStudent(): bool
+    {
+        return $this->role === 'student';
+    }
+
+    public function isPlayer(): bool
+    {
+        return $this->role === 'player';
+    }
+
+    public function isCoach(): bool
+    {
+        return $this->role === 'coach';
+    }
+
+    public function isSpectator(): bool
+    {
+        return $this->role === 'spectator';
+    }
+
+    public function player()
+    {
+        return $this->belongsTo(Player::class, 'player_id');
+    }
+
+    public function coach()
+    {
+        return $this->belongsTo(Coach::class, 'coach_id');
+    }
+
+    public function team()
+    {
+        return $this->belongsTo(Team::class, 'team_id');
+    }
+}

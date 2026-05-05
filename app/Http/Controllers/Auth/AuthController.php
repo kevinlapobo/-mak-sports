@@ -1,0 +1,135 @@
+<?php
+
+namespace App\Http\Controllers\Auth;
+
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
+use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Str;
+
+class AuthController extends Controller
+{
+    public function showLoginForm()
+    {
+        return view('auth.login');
+    }
+
+    public function login(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+
+        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+            $request->session()->regenerate();
+
+            return redirect()->intended(route('home'));
+        }
+
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ])->onlyInput('email');
+    }
+
+    public function showRegisterForm()
+    {
+        $teams = \App\Models\Team::where('is_active', true)->orderBy('name')->get();
+        return view('auth.register', compact('teams'));
+    }
+
+    public function register(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed', Password::defaults()],
+            'role' => ['required', 'in:student,player,coach,spectator'],
+            'phone' => ['nullable', 'string', 'max:20'],
+            'team_id' => ['nullable', 'exists:teams,id'],
+        ]);
+
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'role' => $validated['role'],
+            'full_name' => $validated['name'],
+            'phone' => $validated['phone'] ?? null,
+            'team_id' => $validated['team_id'] ?? null,
+        ]);
+
+        Auth::login($user);
+
+        return redirect()->route('home');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('home');
+    }
+
+    public function dashboard()
+    {
+        $user = auth()->user();
+
+        $data = ['user' => $user];
+
+        if ($user->role === 'coach') {
+            $data['recentCompetitions'] = \App\Models\Competition::with('sport')
+                ->where('is_active', true)
+                ->orderByDesc('start_date')
+                ->get();
+        }
+
+        return view('auth.dashboard', $data);
+    }
+
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function handleGoogleCallback()
+    {
+        try {
+            $googleUser = Socialite::driver('google')->user();
+
+            $user = User::where('google_id', $googleUser->id)->first();
+
+            if ($user) {
+                Auth::login($user);
+            } else {
+                $existingUser = User::where('email', $googleUser->email)->first();
+
+                if ($existingUser) {
+                    $existingUser->update(['google_id' => $googleUser->id]);
+                    Auth::login($existingUser);
+                } else {
+                    $newUser = User::create([
+                        'name' => $googleUser->name,
+                        'email' => $googleUser->email,
+                        'google_id' => $googleUser->id,
+                        'role' => 'spectator',
+                        'full_name' => $googleUser->name,
+                        'password' => Hash::make(Str::random(32)),
+                    ]);
+                    Auth::login($newUser);
+                }
+            }
+
+            return redirect()->intended(route('home'));
+        } catch (\Exception $e) {
+            return redirect()->route('login')->withErrors(['email' => 'Google login failed. Please try again.']);
+        }
+    }
+}
