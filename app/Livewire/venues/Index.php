@@ -9,8 +9,8 @@ class Index extends Component
 {
     public function render()
     {
-        return view('livewire.venues.index', [
-            'venues' => Venue::orderBy('name')->get(),
+        return view('livewire.Venues.index', [
+            'Venues' => Venue::orderBy('name')->get(),
         ])->layout('layouts.public', ['title' => 'Browse Venues']);
     }
 }

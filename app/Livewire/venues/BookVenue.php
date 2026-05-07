@@ -43,9 +43,18 @@ class BookVenue extends Component
         }
     }
 
-    public function updatedBookingDate(): void { $this->checkAvailability(); }
-    public function updatedStartTime(): void { $this->checkAvailability(); }
-    public function updatedEndTime(): void { $this->checkAvailability(); }
+    public function updatedBookingDate(): void
+    {
+        $this->checkAvailability();
+    }
+    public function updatedStartTime(): void
+    {
+        $this->checkAvailability();
+    }
+    public function updatedEndTime(): void
+    {
+        $this->checkAvailability();
+    }
 
     public function submit()
     {
@@ -88,6 +97,6 @@ class BookVenue extends Component
 
     public function render()
     {
-        return view('livewire.venues.book-venue')->layout('layouts.public', ['title' => 'Book ' . $this->venue->name]);
+        return view('livewire.Venues.book-venue')->layout('layouts.public', ['title' => 'Book ' . $this->venue->name]);
     }
 }

@@ -20,6 +20,6 @@ class BookingPending extends Component
 
     public function render()
     {
-        return view('livewire.venues.booking-pending')->layout('layouts.public', ['title' => 'Booking Pending - ' . $this->booking->reference_number]);
+        return view('livewire.Venues.booking-pending')->layout('layouts.public', ['title' => 'Booking Pending - ' . $this->booking->reference_number]);
     }
 }

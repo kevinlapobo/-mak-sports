@@ -20,6 +20,6 @@ class BookingReceipt extends Component
 
     public function render()
     {
-        return view('livewire.venues.booking-receipt')->layout('layouts.public', ['title' => 'Booking Receipt - ' . $this->booking->reference_number]);
+        return view('livewire.Venues.booking-receipt')->layout('layouts.public', ['title' => 'Booking Receipt - ' . $this->booking->reference_number]);
     }
 }
