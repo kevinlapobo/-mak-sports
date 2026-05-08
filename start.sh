@@ -4,8 +4,10 @@ set -e
 # Ensure APP_KEY is set
 php artisan key:generate --force --quiet 2>/dev/null || true
 
-# Clear route cache (avoids Filament/Livewire issues)
+# Clear all caches (avoids stale view/config/route issues)
 php artisan route:clear --quiet 2>/dev/null || true
+php artisan config:clear --quiet 2>/dev/null || true
+php artisan view:clear --quiet 2>/dev/null || true
 
 # Run migrations
 php artisan migrate --force
