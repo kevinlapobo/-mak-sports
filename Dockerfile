@@ -24,6 +24,8 @@ COPY . .
 # Install Composer dependencies
 RUN composer install --optimize-autoloader --no-dev --no-interaction
 
+RUN chmod +x start.sh
+
 EXPOSE 8000
-CMD php artisan serve --host=0.0.0.0 --port=$PORT
+CMD ["/bin/bash", "/app/start.sh"]
 
