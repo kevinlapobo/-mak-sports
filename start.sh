@@ -1,6 +1,14 @@
 #!/bin/bash
 set -e
+
+# Ensure APP_KEY is set
+php artisan key:generate --force --quiet 2>/dev/null || true
+
+# Clear route cache (avoids Filament/Livewire issues)
+php artisan route:clear --quiet 2>/dev/null || true
+
+# Run migrations
 php artisan migrate --force
-php artisan route:clear
-echo "Starting on port 8080..."
+
+echo "Starting Laravel on port 8080..."
 exec php -S 0.0.0.0:8080 -t /app/public

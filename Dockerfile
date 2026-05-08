@@ -21,8 +21,17 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Copy application files
 COPY . .
 
+# Create .env from example if it doesn't exist
+RUN if [ ! -f .env ]; then cp .env.example .env; fi
+
 # Install Composer dependencies
 RUN composer install --optimize-autoloader --no-dev --no-interaction
+
+# Generate APP_KEY
+RUN php artisan key:generate --force
+
+# Fix storage permissions
+RUN chmod -R 777 storage bootstrap/cache
 
 RUN chmod +x start.sh
 
