@@ -1,4 +1,6 @@
 #!/bin/bash
-php artisan migrate --force
-php artisan db:seed --force
-php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
+set -e
+php artisan migrate --force || true
+php artisan db:seed --force || true
+echo "Starting on port 8080..."
+exec php -S 0.0.0.0:8080 -t /app/public
