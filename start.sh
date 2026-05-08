@@ -10,5 +10,10 @@ php artisan route:clear --quiet 2>/dev/null || true
 # Run migrations
 php artisan migrate --force
 
-echo "Starting Laravel on port 8080..."
-exec php -S 0.0.0.0:8080 -t /app/public
+echo "Starting Nginx + PHP-FPM on port 8080..."
+
+# Start PHP-FPM in background
+php-fpm -D
+
+# Start Nginx in foreground
+exec nginx

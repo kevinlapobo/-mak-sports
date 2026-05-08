@@ -12,7 +12,7 @@ class LiveScores extends Component
     #[On('refresh')]
     public function refresh(): void
     {
-        // Just re-render — Livewire handles the rest
+        // Just re-render 
     }
 
     public function render()

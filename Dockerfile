@@ -2,10 +2,11 @@ FROM php:8.3-fpm
 
 WORKDIR /app
 
-# Install system dependencies and PHP extensions
+# Install system dependencies, PHP extensions, and Nginx
 RUN apt-get update && apt-get install -y \
     git \
     curl \
+    nginx \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
@@ -33,8 +34,15 @@ RUN php artisan key:generate --force
 # Fix storage permissions
 RUN chmod -R 777 storage bootstrap/cache
 
+# Configure Nginx
+COPY nginx.conf /etc/nginx/sites-enabled/default
+RUN rm -f /etc/nginx/sites-enabled/default 2>/dev/null; \
+    mkdir -p /etc/nginx/sites-enabled/ && \
+    cp /app/nginx.conf /etc/nginx/sites-enabled/default
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+
 RUN chmod +x start.sh
 
 EXPOSE 8080
-CMD ["/bin/bash", "/app/start.sh"]
 
+CMD ["/bin/bash", "/app/start.sh"]
