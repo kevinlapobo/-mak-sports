@@ -28,7 +28,3 @@ EXPOSE 8000
 CMD php artisan serve --host=0.0.0.0 --port=$PORT
 
 RUN php artisan migrate --force
-
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
