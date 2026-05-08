@@ -26,6 +26,6 @@ RUN composer install --optimize-autoloader --no-dev --no-interaction
 
 RUN chmod +x start.sh
 
-EXPOSE 8000
+EXPOSE 8080
 CMD ["/bin/bash", "/app/start.sh"]
 
