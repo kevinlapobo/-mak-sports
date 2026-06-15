@@ -12,8 +12,8 @@
             @endif
 
             @if($errors->any())
-            <div style="background:#fef2f2; border-left:4px solid #CC0000; padding:16px 20px; margin:16px; border-radius:0 8px 8px 0;">
-                <div style="font-size:14px; font-weight:700; color:#CC0000;">⚠️ Please fix the following:</div>
+            <div style="background:#fef2f2; border-left:4px solid var(--muk-red); padding:16px 20px; margin:16px; border-radius:0 8px 8px 0;">
+                <div style="font-size:14px; font-weight:700; color:var(--muk-red);">⚠️ Please fix the following:</div>
                 <ul style="margin:8px 0 0 20px; font-size:13px; color:#333;">
                     @foreach($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -25,7 +25,7 @@
             <form wire:submit="updateProfile" style="padding:24px;">
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
                     <div>
-                        <label style="font-size:13px; font-weight:600; color:#333; display:block; margin-bottom:4px;">Full Name <span style="color:#CC0000;">*</span></label>
+                        <label style="font-size:13px; font-weight:600; color:#333; display:block; margin-bottom:4px;">Full Name <span style="color:var(--muk-red);">*</span></label>
                         <input type="text" wire:model="full_name" required style="width:100%; padding:10px 12px; border:1px solid #e5e7eb; border-radius:8px; font-size:14px;">
                     </div>
                     <div>
@@ -57,7 +57,7 @@
                     <textarea wire:model="qualification" rows="3" placeholder="Certifications, degrees, etc." style="width:100%; padding:10px 12px; border:1px solid #e5e7eb; border-radius:8px; font-size:14px; resize:vertical;"></textarea>
                 </div>
 
-                <button type="submit" style="width:100%; padding:14px; background:#CC0000; color:#fff; border:none; border-radius:10px; font-size:15px; font-weight:700; cursor:pointer;">
+                <button type="submit" style="width:100%; padding:14px; background:var(--muk-red); color:#fff; border:none; border-radius:10px; font-size:15px; font-weight:700; cursor:pointer;">
                     Update Profile
                 </button>
             </form>

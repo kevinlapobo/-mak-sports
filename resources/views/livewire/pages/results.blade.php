@@ -1,7 +1,7 @@
 <div>
     {{-- HEADER --}}
     <div style="margin-bottom:24px;">
-        <h1 style="font-size:22px; font-weight:800; color:#004d26; margin-bottom:8px;">
+        <h1 style="font-size:22px; font-weight:800; color:var(--muk-green-dark); margin-bottom:8px;">
             Match Results
         </h1>
         <p style="font-size:14px; color:#9a9a9a;">
@@ -13,11 +13,11 @@
     <div style="background:#fff; border-radius:12px; padding:16px; margin-bottom:20px; border:1px solid #e5e7eb;">
         <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
             <div style="flex:1; min-width:200px;">
-                <label style="font-size:12px; font-weight:700; color:#004d26; display:block; margin-bottom:4px;">Search Teams</label>
+                <label style="font-size:12px; font-weight:700; color:var(--muk-green-dark); display:block; margin-bottom:4px;">Search Teams</label>
                 <input wire:model.live="search" type="text" placeholder="Search by team name..." style="width:100%; border:1px solid #e5e7eb; border-radius:8px; padding:8px 12px; font-size:13px;">
             </div>
             <div>
-                <label style="font-size:12px; font-weight:700; color:#004d26; display:block; margin-bottom:4px;">Sport</label>
+                <label style="font-size:12px; font-weight:700; color:var(--muk-green-dark); display:block; margin-bottom:4px;">Sport</label>
                 <select wire:model.live="sport" style="border:1px solid #e5e7eb; border-radius:8px; padding:8px 12px; font-size:13px; min-width:150px;">
                     <option value="">All Sports</option>
                     @foreach($sports as $s)

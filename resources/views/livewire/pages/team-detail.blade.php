@@ -2,11 +2,11 @@
     {{-- TEAM HEADER --}}
     <div style="background:#fff; border-radius:12px; padding:24px; margin-bottom:20px; border:1px solid #e5e7eb;">
         <div style="display:flex; gap:20px; align-items:center;">
-            <div style="width:80px; height:80px; background:#006633; border-radius:16px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:32px; font-weight:800; flex-shrink:0;">
+            <div style="width:80px; height:80px; background:var(--muk-green); border-radius:16px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:32px; font-weight:800; flex-shrink:0;">
                 {{ strtoupper(substr($team->name, 0, 2)) }}
             </div>
             <div style="flex:1;">
-                <h1 style="font-size:24px; font-weight:800; color:#004d26; margin-bottom:4px;">{{ $team->name }}</h1>
+                <h1 style="font-size:24px; font-weight:800; color:var(--muk-green-dark); margin-bottom:4px;">{{ $team->name }}</h1>
                 @if($team->sport)
                     <div style="font-size:14px; color:#9a9a9a; margin-bottom:8px;">{{ $team->sport->name }}</div>
                 @endif
@@ -19,15 +19,15 @@
         {{-- STATS --}}
         <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; margin-top:20px; padding-top:20px; border-top:1px solid #f0f0f0;">
             <div style="text-align:center; background:#f9fafb; border-radius:10px; padding:14px;">
-                <div style="font-size:24px; font-weight:800; color:#006633;">{{ $totalMatches }}</div>
+                <div style="font-size:24px; font-weight:800; color:var(--muk-green);">{{ $totalMatches }}</div>
                 <div style="font-size:11px; color:#9a9a9a; margin-top:4px;">Total Matches</div>
             </div>
             <div style="text-align:center; background:#f0faf4; border-radius:10px; padding:14px;">
-                <div style="font-size:24px; font-weight:800; color:#006633;">{{ $wins }}</div>
+                <div style="font-size:24px; font-weight:800; color:var(--muk-green);">{{ $wins }}</div>
                 <div style="font-size:11px; color:#9a9a9a; margin-top:4px;">Wins</div>
             </div>
             <div style="text-align:center; background:#f9fafb; border-radius:10px; padding:14px;">
-                <div style="font-size:24px; font-weight:800; color:#006633;">{{ $team->players->count() }}</div>
+                <div style="font-size:24px; font-weight:800; color:var(--muk-green);">{{ $team->players->count() }}</div>
                 <div style="font-size:11px; color:#9a9a9a; margin-top:4px;">Players</div>
             </div>
         </div>
@@ -36,7 +36,7 @@
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
         {{-- RECENT MATCHES --}}
         <div>
-            <h3 style="font-size:16px; font-weight:800; color:#004d26; margin-bottom:12px;">Recent Matches</h3>
+            <h3 style="font-size:16px; font-weight:800; color:var(--muk-green-dark); margin-bottom:12px;">Recent Matches</h3>
             @if($recentMatches->count() > 0)
                 <div style="background:#fff; border-radius:12px; padding:14px; border:1px solid #e5e7eb;">
                     <div style="display:flex; flex-direction:column; gap:10px;">
@@ -75,7 +75,7 @@
 
         {{-- UPCOMING MATCHES --}}
         <div>
-            <h3 style="font-size:16px; font-weight:800; color:#004d26; margin-bottom:12px;">Upcoming Matches</h3>
+            <h3 style="font-size:16px; font-weight:800; color:var(--muk-green-dark); margin-bottom:12px;">Upcoming Matches</h3>
             @if($upcomingMatches->count() > 0)
                 <div style="background:#fff; border-radius:12px; padding:14px; border:1px solid #e5e7eb;">
                     <div style="display:flex; flex-direction:column; gap:10px;">
@@ -89,7 +89,7 @@
                                     <span style="font-size:12px; font-weight:700; color:#111; text-align:right; flex:1;">
                                         {{ $match->homeTeam->name }}
                                     </span>
-                                    <span style="background:#006633; color:#fff; padding:4px 10px; border-radius:6px; font-size:10px; font-weight:700;">
+                                    <span style="background:var(--muk-green); color:#fff; padding:4px 10px; border-radius:6px; font-size:10px; font-weight:700;">
                                         VS
                                     </span>
                                     <span style="font-size:12px; font-weight:700; color:#111; flex:1;">
@@ -111,14 +111,14 @@
     {{-- PLAYERS ROSTER --}}
     @if($team->players->count() > 0)
         <div style="margin-top:24px;">
-            <h3 style="font-size:16px; font-weight:800; color:#004d26; margin-bottom:12px;">Players Roster</h3>
+            <h3 style="font-size:16px; font-weight:800; color:var(--muk-green-dark); margin-bottom:12px;">Players Roster</h3>
             <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:12px;">
                 @foreach($team->players as $player)
                     <a href="{{ route('player.detail', $player->id) }}"
                        style="background:#fff; border-radius:10px; padding:14px; border:1px solid #e5e7eb; text-decoration:none; text-align:center; transition:box-shadow .15s;"
                        onmouseover="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'"
                        onmouseout="this.style.boxShadow='none'">
-                        <div style="width:50px; height:50px; background:#f0faf4; border-radius:50%; margin:0 auto 8px; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:800; color:#006633;">
+                        <div style="width:50px; height:50px; background:#f0faf4; border-radius:50%; margin:0 auto 8px; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:800; color:var(--muk-green);">
                             {{ strtoupper(substr($player->name, 0, 1)) }}
                         </div>
                         <div style="font-size:13px; font-weight:700; color:#111;">{{ $player->name }}</div>

@@ -5,7 +5,7 @@
      margin-bottom:20px;">
     <div style="display:flex; align-items:center; gap:12px;">
         <span class="live-badge">● LIVE</span>
-        <h1 style="font-size:22px; font-weight:800; color:#004d26; margin:0;">
+        <h1 style="font-size:22px; font-weight:800; color:var(--muk-green-dark); margin:0;">
             Live Scores
         </h1>
     </div>
@@ -17,11 +17,11 @@
 {{-- Live matches --}}
 @forelse($liveMatches as $match)
 <div style="background:#fff; border-radius:14px; margin-bottom:16px;
-     border:2px solid #CC0000; overflow:hidden;
+     border:2px solid var(--muk-red); overflow:hidden;
      box-shadow:0 4px 16px rgba(204,0,0,.1);">
 
     {{-- Match header --}}
-    <div style="background:#CC0000; padding:8px 16px;
+    <div style="background:var(--muk-red); padding:8px 16px;
          display:flex; align-items:center; justify-content:space-between;">
         <span style="font-size:11px; font-weight:700; color:#fff;">
             {{ $match->competition->name ?? 'Match' }}
@@ -40,7 +40,7 @@
                  style="width:50px; height:50px; object-fit:contain;
                  margin-bottom:8px;"/>
             @else
-            <div style="width:50px; height:50px; background:#006633;
+            <div style="width:50px; height:50px; background:var(--muk-green);
                  border-radius:50%; display:flex; align-items:center;
                  justify-content:center; font-size:20px; font-weight:800;
                  color:#fff; margin:0 auto 8px;">
@@ -59,7 +59,7 @@
                 <span style="color:#ccc;">-</span>
                 {{ $match->away_score }}
             </div>
-            <div style="font-size:11px; color:#CC0000; font-weight:700;
+            <div style="font-size:11px; color:var(--muk-red); font-weight:700;
                  margin-top:4px;">
                 {{ $match->minute }}'
             </div>
@@ -76,7 +76,7 @@
                  style="width:50px; height:50px; object-fit:contain;
                  margin-bottom:8px;"/>
             @else
-            <div style="width:50px; height:50px; background:#006633;
+            <div style="width:50px; height:50px; background:var(--muk-green);
                  border-radius:50%; display:flex; align-items:center;
                  justify-content:center; font-size:20px; font-weight:800;
                  color:#fff; margin:0 auto 8px;">
@@ -145,12 +145,12 @@
 @if($upcomingToday->count() > 0)
 <div style="background:#fff; border-radius:12px; padding:18px;
      border:1px solid #e5e7eb;">
-    <h3 style="font-size:15px; font-weight:800; color:#004d26;
+    <h3 style="font-size:15px; font-weight:800; color:var(--muk-green-dark);
          margin-bottom:14px;">Starting Soon Today</h3>
     @foreach($upcomingToday as $match)
     <div style="display:flex; align-items:center; padding:10px 0;
          border-bottom:1px solid #f5f5f5;">
-        <div style="font-size:14px; font-weight:700; color:#CC0000;
+        <div style="font-size:14px; font-weight:700; color:var(--muk-red);
              width:50px; flex-shrink:0;">
             {{ $match->match_date->format('H:i') }}
         </div>

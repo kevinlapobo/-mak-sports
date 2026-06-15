@@ -16,6 +16,7 @@ use App\Filament\Widgets\MatchesOverTimeChart;
 use App\Filament\Widgets\PlayersPerTeamChart;
 use App\Filament\Widgets\VenueBookingsChart;
 use App\Filament\Widgets\RecentMatchesTable;
+use Filament\Http\Middleware\Authenticate;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
@@ -65,6 +66,10 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
-            ]);
+            ])
+            ->authMiddleware([
+                Authenticate::class
+            ])
+        ;
     }
 }

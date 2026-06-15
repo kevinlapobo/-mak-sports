@@ -6,7 +6,7 @@
             @if($match->competition)
                 <div style="font-size:13px; color:#9a9a9a; font-weight:600; margin-bottom:4px;">{{ $match->competition->name }}</div>
             @endif
-            <div style="display:inline-block; background:{{ $match->status === 'live' ? '#CC0000' : ($match->status === 'finished' ? '#111' : '#006633') }}; color:#fff; padding:6px 14px; border-radius:20px; font-size:12px; font-weight:700; text-transform:uppercase;">
+            <div style="display:inline-block; background:{{ $match->status === 'live' ? 'var(--muk-red)' : ($match->status === 'finished' ? '#111' : 'var(--muk-green)') }}; color:#fff; padding:6px 14px; border-radius:20px; font-size:12px; font-weight:700; text-transform:uppercase;">
                 {{ $match->status === 'live' ? '● LIVE' : ($match->status === 'finished' ? 'FT' : 'Scheduled') }}
             </div>
         </div>
@@ -15,7 +15,7 @@
         <div style="display:flex; align-items:center; justify-content:center; gap:20px; margin-bottom:16px;">
             {{-- Home Team --}}
             <div style="flex:1; text-align:center;">
-                <div style="width:60px; height:60px; background:#006633; border-radius:12px; margin:0 auto 8px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:24px; font-weight:800;">
+                <div style="width:60px; height:60px; background:var(--muk-green); border-radius:12px; margin:0 auto 8px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:24px; font-weight:800;">
                     {{ strtoupper(substr($match->homeTeam->name, 0, 2)) }}
                 </div>
                 <div style="font-size:16px; font-weight:700; color:#111;">{{ $match->homeTeam->name }}</div>
@@ -37,7 +37,7 @@
 
             {{-- Away Team --}}
             <div style="flex:1; text-align:center;">
-                <div style="width:60px; height:60px; background:#006633; border-radius:12px; margin:0 auto 8px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:24px; font-weight:800;">
+                <div style="width:60px; height:60px; background:var(--muk-green); border-radius:12px; margin:0 auto 8px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:24px; font-weight:800;">
                     {{ strtoupper(substr($match->awayTeam->name, 0, 2)) }}
                 </div>
                 <div style="font-size:16px; font-weight:700; color:#111;">{{ $match->awayTeam->name }}</div>
@@ -58,11 +58,11 @@
     {{-- MATCH EVENTS --}}
     @if($match->events->count() > 0)
         <div style="background:#fff; border-radius:12px; padding:20px; margin-bottom:20px; border:1px solid #e5e7eb;">
-            <h3 style="font-size:16px; font-weight:800; color:#004d26; margin-bottom:16px;">Match Events</h3>
+            <h3 style="font-size:16px; font-weight:800; color:var(--muk-green-dark); margin-bottom:16px;">Match Events</h3>
             <div style="display:flex; flex-direction:column; gap:10px;">
                 @foreach($match->events->sortBy('minute') as $event)
                     <div style="display:flex; align-items:center; gap:12px; padding:10px; background:#f9fafb; border-radius:8px;">
-                        <div style="font-size:12px; font-weight:700; color:#006633; width:40px; flex-shrink:0;">{{ $event->minute }}'</div>
+                        <div style="font-size:12px; font-weight:700; color:var(--muk-green); width:40px; flex-shrink:0;">{{ $event->minute }}'</div>
                         <div style="font-size:18px;">
                             @if($event->type === 'goal') ⚽
                             @elseif($event->type === 'yellow_card') 🟨
@@ -90,12 +90,12 @@
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
         {{-- Home Team Players --}}
         <div style="background:#fff; border-radius:12px; padding:20px; border:1px solid #e5e7eb;">
-            <h3 style="font-size:14px; font-weight:800; color:#004d26; margin-bottom:12px;">{{ $match->homeTeam->name }}</h3>
+            <h3 style="font-size:14px; font-weight:800; color:var(--muk-green-dark); margin-bottom:12px;">{{ $match->homeTeam->name }}</h3>
             @if($match->homeTeam->players->count() > 0)
                 <div style="display:flex; flex-direction:column; gap:8px;">
                     @foreach($match->homeTeam->players->take(11) as $player)
                         <div style="display:flex; align-items:center; gap:10px; padding:8px; background:#f9fafb; border-radius:8px;">
-                            <div style="width:30px; height:30px; background:#006633; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:11px; font-weight:800;">
+                            <div style="width:30px; height:30px; background:var(--muk-green); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:11px; font-weight:800;">
                                 {{ $player->jersey_number ?? '#' }}
                             </div>
                             <div style="font-size:13px; font-weight:600; color:#111;">{{ $player->name }}</div>
@@ -112,12 +112,12 @@
 
         {{-- Away Team Players --}}
         <div style="background:#fff; border-radius:12px; padding:20px; border:1px solid #e5e7eb;">
-            <h3 style="font-size:14px; font-weight:800; color:#004d26; margin-bottom:12px;">{{ $match->awayTeam->name }}</h3>
+            <h3 style="font-size:14px; font-weight:800; color:var(--muk-green-dark); margin-bottom:12px;">{{ $match->awayTeam->name }}</h3>
             @if($match->awayTeam->players->count() > 0)
                 <div style="display:flex; flex-direction:column; gap:8px;">
                     @foreach($match->awayTeam->players->take(11) as $player)
                         <div style="display:flex; align-items:center; gap:10px; padding:8px; background:#f9fafb; border-radius:8px;">
-                            <div style="width:30px; height:30px; background:#006633; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:11px; font-weight:800;">
+                            <div style="width:30px; height:30px; background:var(--muk-green); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:11px; font-weight:800;">
                                 {{ $player->jersey_number ?? '#' }}
                             </div>
                             <div style="font-size:13px; font-weight:600; color:#111;">{{ $player->name }}</div>

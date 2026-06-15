@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
-        .mak-green { background-color: #006633; }
+        .mak-green { background-color: #28A745; }
         .mak-gold { color: #FFD700; }
     </style>
 </head>

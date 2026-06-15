@@ -9,19 +9,19 @@
         {{-- Quick Stats --}}
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <a href="{{ route('live') }}" class="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow">
-                <div class="text-2xl font-bold text-[#006633]">LIVE</div>
+                <div class="text-2xl font-bold text-[#28A745]">LIVE</div>
                 <div class="text-sm text-gray-500">Live Scores</div>
             </a>
             <a href="{{ route('results') }}" class="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow">
-                <div class="text-2xl font-bold text-[#006633]">FT</div>
+                <div class="text-2xl font-bold text-[#28A745]">FT</div>
                 <div class="text-sm text-gray-500">Results</div>
             </a>
             <a href="{{ route('standings') }}" class="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow">
-                <div class="text-2xl font-bold text-[#006633]">📊</div>
+                <div class="text-2xl font-bold text-[#28A745]">📊</div>
                 <div class="text-sm text-gray-500">Standings</div>
             </a>
             <a href="{{ route('fixtures') }}" class="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow">
-                <div class="text-2xl font-bold text-[#006633]">📅</div>
+                <div class="text-2xl font-bold text-[#28A745]">📅</div>
                 <div class="text-sm text-gray-500">Fixtures</div>
             </a>
         </div>
@@ -32,15 +32,15 @@
                 <h4 class="text-lg font-bold text-gray-900 mb-4">Your Sports Overview</h4>
                 <div class="space-y-3">
                     <a href="{{ route('standings') }}" class="block p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
-                        <div class="font-semibold text-[#006633]">League Standings</div>
+                        <div class="font-semibold text-[#28A745]">League Standings</div>
                         <div class="text-sm text-gray-600">Check current standings across all competitions</div>
                     </a>
                     <a href="{{ route('fixtures') }}" class="block p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
-                        <div class="font-semibold text-[#006633]">Upcoming Matches</div>
+                        <div class="font-semibold text-[#28A745]">Upcoming Matches</div>
                         <div class="text-sm text-gray-600">See what matches are coming up</div>
                     </a>
                     <a href="{{ route('results') }}" class="block p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
-                        <div class="font-semibold text-[#006633]">Recent Results</div>
+                        <div class="font-semibold text-[#28A745]">Recent Results</div>
                         <div class="text-sm text-gray-600">Catch up on the latest results</div>
                     </a>
                 </div>
@@ -50,11 +50,11 @@
                 <h4 class="text-lg font-bold text-gray-900 mb-4">Player Dashboard</h4>
                 <div class="space-y-3">
                     <div class="p-3 bg-green-50 rounded-lg">
-                        <div class="font-semibold text-[#006633]">My Stats</div>
+                        <div class="font-semibold text-[#28A745]">My Stats</div>
                         <div class="text-sm text-gray-600">Your performance statistics will appear here once linked to a player profile</div>
                     </div>
                     <a href="{{ route('teams') }}" class="block p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
-                        <div class="font-semibold text-[#006633]">My Team</div>
+                        <div class="font-semibold text-[#28A745]">My Team</div>
                         <div class="text-sm text-gray-600">View your team's information</div>
                     </a>
                 </div>
@@ -64,15 +64,15 @@
                 <h4 class="text-lg font-bold text-gray-900 mb-4">Coach Dashboard</h4>
                 <div class="space-y-3">
                     <a href="{{ route('standings') }}" class="block p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
-                        <div class="font-semibold text-[#006633]">Competition Standings</div>
+                        <div class="font-semibold text-[#28A745]">Competition Standings</div>
                         <div class="text-sm text-gray-600">Monitor your team's position in the league</div>
                     </a>
                     <a href="{{ route('fixtures') }}" class="block p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
-                        <div class="font-semibold text-[#006633]">Upcoming Fixtures</div>
+                        <div class="font-semibold text-[#28A745]">Upcoming Fixtures</div>
                         <div class="text-sm text-gray-600">Plan for upcoming matches</div>
                     </a>
                     <a href="{{ route('teams') }}" class="block p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
-                        <div class="font-semibold text-[#006633]">Team Management</div>
+                        <div class="font-semibold text-[#28A745]">Team Management</div>
                         <div class="text-sm text-gray-600">View and manage your team roster</div>
                     </a>
                 </div>
@@ -124,10 +124,10 @@
                 <p class="text-gray-600">Browse all the latest scores, fixtures, and standings.</p>
                 <div class="mt-4 grid grid-cols-2 gap-3">
                     <a href="{{ route('live') }}" class="text-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
-                        <div class="font-bold text-[#006633]">Live Scores</div>
+                        <div class="font-bold text-[#28A745]">Live Scores</div>
                     </a>
                     <a href="{{ route('teams') }}" class="text-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
-                        <div class="font-bold text-[#006633]">Teams</div>
+                        <div class="font-bold text-[#28A745]">Teams</div>
                     </a>
                 </div>
             </div>

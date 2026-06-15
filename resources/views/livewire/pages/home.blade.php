@@ -1,111 +1,76 @@
 <div>
 
-{{-- HERO SECTION --}}
-<div class="hero">
-    <div class="hero-pattern"></div>
-    <div class="hero-inner">
-
-        {{-- LEFT: Text --}}
-        <div class="hero-left">
-            <div class="hero-badge">
-                <span class="live-badge" style="background:#CC0000; color:#fff;">
-                    @if($liveMatches->count() > 0) ● {{ $liveMatches->count() }} LIVE @else MAK SPORTS @endif
-                </span>
-            </div>
-            <div class="hero-label">Official Makerere University Sports Platform</div>
-            <h1>
-                Makerere<br />University<br /><span>Sports</span>
-            </h1>
-            <p>
-                Live scores, fixtures, results and standings for all Makerere University sports. Free to view — register to unlock personalised features.
-            </p>
-            <div class="hero-ctas">
-                <a href="{{ route('live') }}" class="btn-red">
-                    @if($liveMatches->count() > 0) Watch Live @else View Live Scores @endif
-                </a>
-                <a href="{{ route('fixtures') }}" class="btn-ghost">See Fixtures</a>
-                <a href="{{ route('standings') }}" class="btn-ghost">Standings</a>
-            </div>
-
-            {{-- Hero Stats --}}
-            <div class="hero-stats">
-                <div style="text-align:center;">
-                    <div class="stat-num">{{ $stats['sports'] }}</div>
-                    <div class="stat-label">Sports</div>
+{{-- HERO SECTION WITH IMAGE SLIDER --}}
+<div class="hero-slider" id="heroSlider">
+    {{-- Slide 1: Person kicking a ball --}}
+    <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1461896836934-bd45ba8fcf9b?w=1600&q=80');">
+        <div class="hero-slide-overlay"></div>
+        <div class="hero-inner">
+            <div class="hero-left">
+                <div class="hero-badge">
+                    <span class="live-badge" style="background:var(--muk-red); color:#fff;">
+                        @if($liveMatches->count() > 0) ● {{ $liveMatches->count() }} LIVE @else MAK SPORTS @endif
+                    </span>
                 </div>
-                <div style="text-align:center;">
-                    <div class="stat-num">{{ $stats['teams'] }}</div>
-                    <div class="stat-label">Teams</div>
+                <div class="hero-label">Official Makerere University Sports Platform</div>
+                <h1>Makerere<br />University<br /><span>Sports</span></h1>
+                <p>Live scores, fixtures, results and standings for all Makerere University sports. Free to view — register to unlock personalised features.</p>
+                <div class="hero-ctas">
+                    <a href="{{ route('live') }}" class="btn-hero">
+                        @if($liveMatches->count() > 0) Watch Live @else View Live Scores @endif
+                    </a>
+                    <a href="{{ route('fixtures') }}" class="btn-hero-outline">See Fixtures</a>
+                    <a href="{{ route('standings') }}" class="btn-hero-outline">Standings</a>
                 </div>
-                <div style="text-align:center;">
-                    <div class="stat-num">{{ $stats['matches'] }}</div>
-                    <div class="stat-label">Matches</div>
-                </div>
-                <div style="text-align:center;">
-                    <div class="stat-num">{{ $stats['players'] }}</div>
-                    <div class="stat-label">Players</div>
+                <div class="hero-stats">
+                    <div><div class="stat-num">{{ $stats['sports'] }}</div><div class="stat-label">Sports</div></div>
+                    <div><div class="stat-num">{{ $stats['teams'] }}</div><div class="stat-label">Teams</div></div>
+                    <div><div class="stat-num">{{ $stats['matches'] }}</div><div class="stat-label">Matches</div></div>
+                    <div><div class="stat-num">{{ $stats['players'] }}</div><div class="stat-label">Players</div></div>
                 </div>
             </div>
+            <div class="hero-right">@include('livewire.pages._hero_card', ['featuredMatch' => $featuredMatch])</div>
         </div>
+    </div>
 
-        {{-- RIGHT: Live Match Card --}}
-        <div class="hero-right">
-            @if($featuredMatch)
-            <a href="{{ route('match.detail', $featuredMatch->id) }}" class="live-card">
-                <div class="live-card-header" style="{{ $featuredMatch->status === 'live' ? 'background:#CC0000;' : 'background:var(--muk-green);' }}">
-                    <span>{{ $featuredMatch->competition->name ?? 'MUK League' }}</span>
-                    @if($featuredMatch->status === 'live')
-                    <span class="live-badge">● LIVE {{ $featuredMatch->minute }}'</span>
-                    @elseif($featuredMatch->status === 'scheduled')
-                    <span>{{ $featuredMatch->match_date->format('d M, H:i') }}</span>
-                    @else
-                    <span>FT</span>
-                    @endif
+    {{-- Slide 2: Stadium / Pitch --}}
+    <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1575361204480-aadea25e6e68?w=1600&q=80');">
+        <div class="hero-slide-overlay"></div>
+        <div class="hero-inner">
+            <div class="hero-left">
+                <div class="hero-badge">
+                    <span class="live-badge" style="background:var(--muk-red); color:#fff;">MAK SPORTS</span>
                 </div>
-                <div class="live-card-body">
-                    <div class="live-card-team">
-                        <div class="live-card-logo">{{ strtoupper(substr($featuredMatch->homeTeam->name, 0, 2)) }}</div>
-                        <div class="live-card-name">{{ $featuredMatch->homeTeam->name }}</div>
-                    </div>
-                    <div class="live-card-score">
-                        @if($featuredMatch->status === 'live' || $featuredMatch->status === 'finished')
-                        <div class="score-big">{{ $featuredMatch->home_score }} — {{ $featuredMatch->away_score }}</div>
-                        @else
-                        <div class="vs-big">VS</div>
-                        <div class="time-small">{{ $featuredMatch->match_date->format('H:i') }}</div>
-                        @endif
-                    </div>
-                    <div class="live-card-team">
-                        <div class="live-card-logo">{{ strtoupper(substr($featuredMatch->awayTeam->name, 0, 2)) }}</div>
-                        <div class="live-card-name">{{ $featuredMatch->awayTeam->name }}</div>
-                    </div>
+                <div class="hero-label">Official Makerere University Sports Platform</div>
+                <h1>Home of<br />Champions<br /><span>#MUKSports</span></h1>
+                <p>From the pitch to the podium — follow every match, every goal, every victory. Makerere University sports at your fingertips.</p>
+                <div class="hero-ctas">
+                    <a href="{{ route('results') }}" class="btn-hero">Latest Results</a>
+                    <a href="{{ route('teams') }}" class="btn-hero-outline">Our Teams</a>
+                    <a href="{{ route('register') }}" class="btn-hero-outline">Join Now</a>
                 </div>
-                <div class="live-card-footer">
-                    {{ $featuredMatch->venue->name ?? 'Main Stadium' }}
-                </div>
-            </a>
-            @else
-            <div class="live-card" style="opacity:.6;">
-                <div class="live-card-header" style="background:var(--muk-green);">
-                    <span>No Live Match</span>
-                </div>
-                <div class="live-card-body" style="justify-content:center; align-items:center; min-height:200px;">
-                    <div style="text-align:center; color:rgba(255,255,255,.6);">
-                        <div style="font-size:36px; margin-bottom:8px;">🏟️</div>
-                        <div style="font-size:13px;">No match in progress</div>
-                    </div>
+                <div class="hero-stats">
+                    <div><div class="stat-num">{{ $stats['sports'] }}</div><div class="stat-label">Sports</div></div>
+                    <div><div class="stat-num">{{ $stats['teams'] }}</div><div class="stat-label">Teams</div></div>
+                    <div><div class="stat-num">{{ $stats['matches'] }}</div><div class="stat-label">Matches</div></div>
+                    <div><div class="stat-num">{{ $stats['players'] }}</div><div class="stat-label">Players</div></div>
                 </div>
             </div>
-            @endif
+            <div class="hero-right">@include('livewire.pages._hero_card', ['featuredMatch' => $featuredMatch])</div>
         </div>
+    </div>
 
+    {{-- Slider navigation --}}
+    <div class="slider-nav">
+        <button class="slider-dot active" data-index="0"></button>
+        <button class="slider-dot" data-index="1"></button>
     </div>
 </div>
 
 {{-- LIVE BANNER (auth only, just after hero) --}}
 @auth
 @if($liveMatches->count() > 0)
-<div style="background:#CC0000; overflow:hidden; white-space:nowrap;">
+<div style="background:var(--muk-red); overflow:hidden; white-space:nowrap;">
     <div style="display:inline-flex; animation:ticker 30s linear infinite; gap:60px; padding:12px 0;">
         @foreach($liveMatches as $match)
         <span style="font-size:14px; font-weight:700; color:#fff; display:inline-flex; align-items:center; gap:10px;">
@@ -245,7 +210,7 @@
                                 <td class="pos">{{ $i + 1 }}</td>
                                 <td style="font-size:12px; font-weight:600;">{{ $standing->team->name ?? 'N/A' }}</td>
                                 <td>{{ $standing->played ?? 0 }}</td>
-                                <td style="color:{{ ($standing->goal_difference ?? 0) >= 0 ? 'var(--muk-green)' : '#CC0000' }}; font-weight:600;">{{ $standing->goal_difference ?? 0 }}</td>
+                                <td style="color:{{ ($standing->goal_difference ?? 0) >= 0 ? 'var(--muk-green)' : 'var(--muk-red)' }}; font-weight:600;">{{ $standing->goal_difference ?? 0 }}</td>
                                 <td class="pts">{{ $standing->points ?? 0 }}</td>
                             </tr>
                             @endforeach
@@ -260,11 +225,11 @@
 
                 @guest
                 {{-- LOGIN PROMPT FOR GUESTS --}}
-                <div style="background:linear-gradient(135deg, #CC0000 0%, #990000 100%); border-radius:14px; overflow:hidden; margin-bottom:20px; padding:24px; text-align:center;">
+                <div style="background:linear-gradient(135deg, var(--muk-red) 0%, #990000 100%); border-radius:14px; overflow:hidden; margin-bottom:20px; padding:24px; text-align:center;">
                     <div style="font-size:32px; margin-bottom:8px;">🔒</div>
                     <div style="font-size:16px; font-weight:800; color:#fff; margin-bottom:4px;">Live Scores & Standings</div>
                     <div style="font-size:12px; color:rgba(255,255,255,.7); margin-bottom:16px;">Sign in or create a free account to view live scores, league standings, and personalised content.</div>
-                    <a href="{{ route('login') }}" style="display:inline-block; background:#fff; color:#CC0000; padding:10px 20px; border-radius:8px; font-size:13px; font-weight:700; text-decoration:none; margin-right:8px;">Sign In</a>
+                    <a href="{{ route('login') }}" style="display:inline-block; background:#fff; color:var(--muk-red); padding:10px 20px; border-radius:8px; font-size:13px; font-weight:700; text-decoration:none; margin-right:8px;">Sign In</a>
                     <a href="{{ route('register') }}" style="display:inline-block; background:rgba(255,255,255,.15); color:#fff; border:1.5px solid rgba(255,255,255,.3); padding:10px 20px; border-radius:8px; font-size:13px; font-weight:700; text-decoration:none;">Register</a>
                 </div>
                 @endguest
@@ -295,7 +260,7 @@
 
                 {{-- QUICK LINKS --}}
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                    <a href="{{ route('live') }}" style="background:#CC0000; color:#fff; padding:16px; border-radius:12px; text-align:center; text-decoration:none;">
+                    <a href="{{ route('live') }}" style="background:var(--muk-red); color:#fff; padding:16px; border-radius:12px; text-align:center; text-decoration:none;">
                         <div style="font-size:24px; font-weight:900;">● LIVE</div>
                         <div style="font-size:11px; opacity:.8;">Live Scores</div>
                     </a>
@@ -341,7 +306,7 @@
 
 {{-- REGISTER CTA --}}
 @guest
-<div class="section" style="background:linear-gradient(135deg, #CC0000 0%, #990000 100%); text-align:center;">
+<div class="section" style="background:linear-gradient(135deg, var(--muk-red) 0%, #990000 100%); text-align:center;">
     <div class="container">
         <div style="font-size:28px; font-weight:900; color:#fff; margin-bottom:8px;">Get Your Personalised Sports Experience</div>
         <div style="font-size:15px; color:rgba(255,255,255,.7); margin-bottom:24px;">Register as a Student, Player, or Coach to access tailored content</div>
@@ -358,16 +323,43 @@
     100% { transform: translateX(-100%); }
 }
 
+/* ── HERO SLIDER ─────────────────── */
+.hero-slider {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    overflow: hidden;
+}
+.hero-slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1s ease;
+    display: flex;
+    align-items: center;
+}
+.hero-slide.active {
+    opacity: 1;
+    position: relative;
+}
+.hero-slide-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,0,0,.8) 0%, rgba(0,0,0,.5) 50%, rgba(0,0,0,.7) 100%);
+}
 .hero-inner {
     position: relative;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 60px 20px;
+    padding: 120px 20px 60px;
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 380px;
     gap: 40px;
     align-items: center;
+    z-index: 2;
 }
 .hero-label {
     font-size: 12px;
@@ -377,7 +369,7 @@
     letter-spacing: 1.5px;
     margin-bottom: 8px;
 }
-.hero h1 {
+.hero-slide h1 {
     font-size: clamp(36px, 5vw, 56px);
     font-weight: 900;
     color: #fff;
@@ -385,7 +377,7 @@
     margin-bottom: 16px;
     letter-spacing: -1px;
 }
-.hero h1 span { color: #CC0000; }
+.hero-slide h1 span { color: var(--muk-red); }
 .hero-stats {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -396,7 +388,7 @@
 .stat-num {
     font-size: 28px;
     font-weight: 900;
-    color: #CC0000;
+    color: var(--muk-red);
 }
 .stat-label {
     font-size: 11px;
@@ -405,9 +397,63 @@
     letter-spacing: .5px;
 }
 
+/* HERO BUTTONS */
+.btn-hero {
+    background: var(--muk-red);
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 9px;
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background .15s;
+    display: inline-block;
+}
+.btn-hero:hover { background: #990000; }
+.btn-hero-outline {
+    background: rgba(255,255,255,.1);
+    color: #fff;
+    border: 1.5px solid rgba(255,255,255,.3);
+    padding: 12px 24px;
+    border-radius: 9px;
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background .15s;
+    display: inline-block;
+}
+.btn-hero-outline:hover { background: rgba(255,255,255,.2); }
+
+/* SLIDER NAV DOTS */
+.slider-nav {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 10;
+}
+.slider-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    background: transparent;
+    cursor: pointer;
+    transition: background .3s, transform .3s;
+    padding: 0;
+}
+.slider-dot.active {
+    background: var(--muk-red);
+    border-color: var(--muk-red);
+    transform: scale(1.2);
+}
+
 /* LIVE CARD */
 .live-card {
-    background: var(--muk-green-dark);
+    background: rgba(0,0,0,.6);
+    backdrop-filter: blur(12px);
     border-radius: 16px;
     overflow: hidden;
     text-decoration: none;
@@ -484,21 +530,21 @@
 }
 .time-small {
     font-size: 11px;
-    color: #CC0000;
+    color: var(--muk-red);
     font-weight: 700;
     margin-top: 4px;
 }
 .live-card-footer {
     padding: 8px 16px;
-    background: rgba(0,0,0,.15);
+    background: rgba(0,0,0,.25);
     font-size: 11px;
     color: rgba(255,255,255,.4);
     text-align: center;
 }
 
-/* RED BUTTON */
+/* RED BUTTON (for use outside hero) */
 .btn-red {
-    background: #CC0000;
+    background: var(--muk-red);
     color: #fff;
     padding: 12px 24px;
     border-radius: 9px;
@@ -658,5 +704,44 @@
     /* Init */
     goTo(0);
     startAuto();
+})();
+
+/* ── HERO SLIDER ── */
+(function() {
+    var hero = document.getElementById('heroSlider');
+    if (!hero) return;
+    var slides = hero.querySelectorAll('.hero-slide');
+    var dots = hero.querySelectorAll('.slider-dot');
+    if (!slides.length) return;
+    var current = 0;
+    var timer;
+
+    function goTo(idx) {
+        slides.forEach(function(s, i) {
+            s.classList.toggle('active', i === idx);
+        });
+        dots.forEach(function(d, i) {
+            d.classList.toggle('active', i === idx);
+        });
+        current = idx;
+    }
+
+    function next() {
+        goTo((current + 1) % slides.length);
+    }
+
+    dots.forEach(function(dot) {
+        dot.addEventListener('click', function() {
+            goTo(parseInt(this.getAttribute('data-index')));
+            resetTimer();
+        });
+    });
+
+    function resetTimer() {
+        clearInterval(timer);
+        timer = setInterval(next, 6000);
+    }
+
+    timer = setInterval(next, 6000);
 })();
 </script>

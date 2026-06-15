@@ -12,7 +12,7 @@
             <label for="email" class="block text-sm font-semibold text-gray-700">Email address</label>
             <div class="mt-1">
                 <input id="email" name="email" type="email" autocomplete="email" required
-                    class="appearance-none block w-full px-3 py-2.5 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#006633] focus:border-transparent"
+                    class="appearance-none block w-full px-3 py-2.5 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#28A745] focus:border-transparent"
                     value="{{ old('email') }}">
             </div>
         </div>
@@ -21,7 +21,7 @@
             <label for="password" class="block text-sm font-semibold text-gray-700">Password</label>
             <div class="relative mt-1">
                 <input id="password" name="password" type="password" autocomplete="current-password" required
-                    class="appearance-none block w-full px-3 py-2.5 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#006633] focus:border-transparent pr-10">
+                    class="appearance-none block w-full px-3 py-2.5 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#28A745] focus:border-transparent pr-10">
                 <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 cursor-pointer">
                     <svg class="h-5 w-5 eye-open" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                     <svg class="h-5 w-5 eye-closed hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L6.59 6.59m7.532 7.532l3.29 3.29M3 3l18 18"/></svg>
@@ -32,14 +32,14 @@
         <div class="flex items-center justify-between">
             <div class="flex items-center">
                 <input id="remember" name="remember" type="checkbox"
-                    class="h-4 w-4 text-[#006633] focus:ring-[#006633] border-gray-300 rounded">
+                    class="h-4 w-4 text-[#28A745] focus:ring-[#28A745] border-gray-300 rounded">
                 <label for="remember" class="ml-2 block text-sm text-gray-700">Remember me</label>
             </div>
         </div>
 
         <div>
             <button type="submit"
-                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-white mak-green hover:bg-[#004d26] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#006633] transition-colors">
+                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-white mak-green hover:bg-[#1e7e34] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#28A745] transition-colors">
                 Sign in
             </button>
         </div>
@@ -47,7 +47,7 @@
 
     <div class="mt-6">
         <a href="{{ route('auth.google') }}"
-            class="w-full flex items-center justify-center gap-3 py-3 px-4 border border-gray-300 rounded-lg shadow-sm text-sm font-bold text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#006633] transition-colors">
+            class="w-full flex items-center justify-center gap-3 py-3 px-4 border border-gray-300 rounded-lg shadow-sm text-sm font-bold text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#28A745] transition-colors">
             <svg class="w-5 h-5" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/>
                 <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -65,7 +65,7 @@
         </div>
 
         <div class="mt-6 text-center">
-            <a href="{{ route('register') }}" class="font-semibold text-[#006633] hover:text-[#004d26]">
+            <a href="{{ route('register') }}" class="font-semibold text-[#28A745] hover:text-[#1e7e34]">
                 Create a new account
             </a>
         </div>

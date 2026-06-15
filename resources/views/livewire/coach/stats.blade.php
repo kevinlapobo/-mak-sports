@@ -12,7 +12,7 @@
                 <div style="font-size:48px; margin-bottom:12px;">📭</div>
                 <div style="font-size:18px; font-weight:700; color:#333; margin-bottom:4px;">No Coach Profile Found</div>
                 <div style="font-size:14px; color:#888;">Please update your profile to start tracking your statistics.</div>
-                <a href="{{ route('coach.profile') }}" style="display:inline-block; margin-top:16px; background:#CC0000; color:#fff; padding:10px 24px; border-radius:8px; font-size:14px; font-weight:600; text-decoration:none;">Set Up Profile</a>
+                <a href="{{ route('coach.profile') }}" style="display:inline-block; margin-top:16px; background:var(--muk-red); color:#fff; padding:10px 24px; border-radius:8px; font-size:14px; font-weight:600; text-decoration:none;">Set Up Profile</a>
             </div>
             @else
 
@@ -38,7 +38,7 @@
                         <div style="font-size:11px; color:#888; text-transform:uppercase;">Draws</div>
                     </div>
                     <div style="text-align:center; padding:16px; background:#fef2f2; border-radius:12px;">
-                        <div style="font-size:28px; font-weight:900; color:#CC0000;">{{ $stats['losses'] }}</div>
+                        <div style="font-size:28px; font-weight:900; color:var(--muk-red);">{{ $stats['losses'] }}</div>
                         <div style="font-size:11px; color:#888; text-transform:uppercase;">Losses</div>
                     </div>
                 </div>

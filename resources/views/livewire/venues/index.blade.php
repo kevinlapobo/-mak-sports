@@ -19,7 +19,7 @@
                         📍 {{ $venue->location }} &bull; Capacity: {{ number_format($venue->capacity) }}
                     </div>
                 </div>
-                <a href="{{ route('venue.book', $venue->id) }}" style="background:#CC0000; color:#fff; padding:10px 20px; border-radius:8px; font-size:13px; font-weight:700; text-decoration:none; white-space:nowrap;">
+                <a href="{{ route('venue.book', $venue->id) }}" style="background:var(--muk-red); color:#fff; padding:10px 20px; border-radius:8px; font-size:13px; font-weight:700; text-decoration:none; white-space:nowrap;">
                     Book Now →
                 </a>
             </div>

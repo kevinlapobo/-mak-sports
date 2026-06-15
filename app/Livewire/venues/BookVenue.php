@@ -97,6 +97,6 @@ class BookVenue extends Component
 
     public function render()
     {
-        return view('livewire.Venues.book-venue')->layout('layouts.public', ['title' => 'Book ' . $this->venue->name]);
+        return view('livewire.venues.book-venue')->layout('layouts.public', ['title' => 'Book ' . $this->venue->name]);
     }
 }

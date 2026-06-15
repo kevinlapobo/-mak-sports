@@ -44,7 +44,7 @@
         </div>
 
         {{-- Toast Notification --}}
-        <div id="toast" style="display:none; position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:#006633; color:#fff; padding:12px 24px; border-radius:10px; font-size:14px; font-weight:600; z-index:9999; box-shadow:0 8px 24px rgba(0,0,0,.25); transition:opacity .3s;"></div>
+        <div id="toast" style="display:none; position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:var(--muk-green); color:#fff; padding:12px 24px; border-radius:10px; font-size:14px; font-weight:600; z-index:9999; box-shadow:0 8px 24px rgba(0,0,0,.25); transition:opacity .3s;"></div>
 
         {{-- Related News --}}
         @if($related->count() > 0)
@@ -113,8 +113,8 @@
             '<!DOCTYPE html>',
             '<html><head><meta charset="utf-8"><title>' + title + '</title>',
             '<style>body{font-family:Arial,Helvetica,sans-serif;max-width:700px;margin:40px auto;padding:20px;color:#333;}',
-            'h1{color:#006633;font-size:24px;margin-bottom:8px;}',
-            '.meta{color:#888;font-size:12px;margin-bottom:24px;border-bottom:2px solid #006633;padding-bottom:12px;}',
+            'h1{color:var(--muk-green);font-size:24px;margin-bottom:8px;}',
+            '.meta{color:#888;font-size:12px;margin-bottom:24px;border-bottom:2px solid var(--muk-green);padding-bottom:12px;}',
             'p{line-height:1.8;font-size:14px;margin-bottom:12px;}',
             '</style></head><body>',
             '<h1>' + title + '</h1>',

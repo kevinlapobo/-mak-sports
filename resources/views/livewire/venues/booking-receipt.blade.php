@@ -70,8 +70,8 @@
                         <div style="font-size:11px; color:#888; text-align:center;">Organizer Signature</div>
                     </div>
                     <div>
-                        <div style="border-bottom:1px solid #CC0000; height:60px; margin-bottom:4px;"></div>
-                        <div style="font-size:11px; color:#CC0000; text-align:center; font-weight:600;">Facility Manager Signature (Required)</div>
+                        <div style="border-bottom:1px solid var(--muk-red); height:60px; margin-bottom:4px;"></div>
+                        <div style="font-size:11px; color:var(--muk-red); text-align:center; font-weight:600;">Facility Manager Signature (Required)</div>
                     </div>
                 </div>
 
@@ -87,7 +87,7 @@
             <button id="btn-download-receipt" style="display:inline-flex; align-items:center; gap:6px; background:#fff; border:1px solid #e5e7eb; padding:10px 18px; border-radius:8px; font-size:13px; font-weight:600; color:#333; cursor:pointer;">📥 Download</button>
         </div>
 
-        <div id="toast-receipt" style="display:none; position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:#006633; color:#fff; padding:12px 24px; border-radius:10px; font-size:14px; font-weight:600; z-index:9999; box-shadow:0 8px 24px rgba(0,0,0,.25); transition:opacity .3s;"></div>
+        <div id="toast-receipt" style="display:none; position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:var(--muk-green); color:#fff; padding:12px 24px; border-radius:10px; font-size:14px; font-weight:600; z-index:9999; box-shadow:0 8px 24px rgba(0,0,0,.25); transition:opacity .3s;"></div>
     </div>
 </div>
 
@@ -106,7 +106,7 @@ document.getElementById('btn-download-receipt').addEventListener('click', functi
     var b = {!! json_encode($booking->toArray()) !!};
     var v = {!! json_encode($booking->venue->toArray()) !!};
     var u = {!! json_encode($booking->user->toArray()) !!};
-    var html = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Booking Receipt ' + b.reference_number + '</title><style>body{font-family:Arial,sans-serif;max-width:600px;margin:30px auto;padding:20px;}h1{text-align:center;color:#006633;font-size:22px;}.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee;}.label{color:#888;font-size:12px;text-transform:uppercase;}.value{font-size:14px;font-weight:600;}.sig{display:flex;gap:60px;margin-top:40px;}.sig div{flex:1;border-bottom:1px solid #333;padding-top:60px;text-align:center;font-size:12px;}</style></head><body><h1>BOOKING RECEIPT</h1><p style="text-align:center;color:#888;font-size:12px;">MAKSPORTS — Makerere University | ' + b.reference_number + '</p>';
+    var html = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Booking Receipt ' + b.reference_number + '</title><style>body{font-family:Arial,sans-serif;max-width:600px;margin:30px auto;padding:20px;}h1{text-align:center;color:var(--muk-green);font-size:22px;}.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee;}.label{color:#888;font-size:12px;text-transform:uppercase;}.value{font-size:14px;font-weight:600;}.sig{display:flex;gap:60px;margin-top:40px;}.sig div{flex:1;border-bottom:1px solid #333;padding-top:60px;text-align:center;font-size:12px;}</style></head><body><h1>BOOKING RECEIPT</h1><p style="text-align:center;color:#888;font-size:12px;">MAKSPORTS — Makerere University | ' + b.reference_number + '</p>';
     [
         ['Venue', v.name], ['Purpose', b.purpose],
         ['Date', b.booking_date], ['Time', b.start_time + ' — ' + b.end_time],

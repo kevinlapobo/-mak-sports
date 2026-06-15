@@ -1,7 +1,7 @@
 <div>
     {{-- HEADER --}}
     <div style="margin-bottom:24px;">
-        <h1 style="font-size:22px; font-weight:800; color:#004d26; margin-bottom:8px;">
+        <h1 style="font-size:22px; font-weight:800; color:var(--muk-green-dark); margin-bottom:8px;">
             Teams
         </h1>
         <p style="font-size:14px; color:#9a9a9a;">
@@ -13,11 +13,11 @@
     <div style="background:#fff; border-radius:12px; padding:16px; margin-bottom:20px; border:1px solid #e5e7eb;">
         <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
             <div style="flex:1; min-width:200px;">
-                <label style="font-size:12px; font-weight:700; color:#004d26; display:block; margin-bottom:4px;">Search Teams</label>
+                <label style="font-size:12px; font-weight:700; color:var(--muk-green-dark); display:block; margin-bottom:4px;">Search Teams</label>
                 <input wire:model.live="search" type="text" placeholder="Search by team name..." style="width:100%; border:1px solid #e5e7eb; border-radius:8px; padding:8px 12px; font-size:13px;">
             </div>
             <div>
-                <label style="font-size:12px; font-weight:700; color:#004d26; display:block; margin-bottom:4px;">Sport</label>
+                <label style="font-size:12px; font-weight:700; color:var(--muk-green-dark); display:block; margin-bottom:4px;">Sport</label>
                 <select wire:model.live="sport" style="border:1px solid #e5e7eb; border-radius:8px; padding:8px 12px; font-size:13px; min-width:150px;">
                     <option value="">All Sports</option>
                     @foreach($sports as $s)
@@ -37,7 +37,7 @@
                    onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'"
                    onmouseout="this.style.boxShadow='none'">
                     <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
-                        <div style="width:50px; height:50px; background:#006633; border-radius:10px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:20px; font-weight:800;">
+                        <div style="width:50px; height:50px; background:var(--muk-green); border-radius:10px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:20px; font-weight:800;">
                             {{ strtoupper(substr($team->name, 0, 2)) }}
                         </div>
                         <div style="flex:1;">

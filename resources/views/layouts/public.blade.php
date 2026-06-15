@@ -12,11 +12,12 @@
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
   :root {
-    --muk-green:      #006633;
-    --muk-green-dark: #004d26;
-    --muk-green-mid:  #005528;
-    --muk-gold:       #FFD700;
+    --muk-green:      #28A745;
+    --muk-green-dark: #1e7e34;
+    --muk-green-mid:  #239e3e;
+    --muk-gold:       #FFC107;
     --muk-gold-dark:  #d4a017;
+    --muk-red:        #ee0000;
     --muk-black:      #0a0a0a;
     --muk-white:      #ffffff;
   }
@@ -39,15 +40,18 @@
     z-index: 1000;
     height: 64px;
     transition: background .3s ease, box-shadow .3s ease, height .3s ease;
-    background: var(--muk-green-dark);
+    background: var(--muk-green);
+    border-bottom: 3px solid var(--muk-red);
     box-shadow: 0 2px 10px rgba(0,0,0,.2);
   }
   #main-nav.with-hero {
     background: transparent;
+    border-bottom-color: transparent;
     box-shadow: none;
   }
   #main-nav.scrolled {
-    background: var(--muk-green-dark);
+    background: var(--muk-green);
+    border-bottom-color: var(--muk-red);
     box-shadow: 0 4px 20px rgba(0,0,0,.3);
     height: 56px;
   }
@@ -105,12 +109,12 @@
   }
   .nav-link.live-link {
     color: #fff;
-    background: #CC0000;
+    background: var(--muk-red);
     animation: livePulse 2s infinite;
     padding: 6px 12px;
   }
   @keyframes livePulse {
-    0%,100% { background: #CC0000; }
+    0%,100% { background: var(--muk-red); }
     50% { background: #990000; }
   }
   /* Mobile menu */
@@ -137,10 +141,10 @@
     min-height: 80vh;
     background: linear-gradient(
       160deg,
-      var(--muk-green-dark) 0%,
-      var(--muk-green) 40%,
-      #005528 70%,
-      #003d1a 100%
+      #1a1a2e 0%,
+      var(--muk-green-dark) 40%,
+      var(--muk-green) 70%,
+      var(--muk-green-dark) 100%
     );
     display: flex;
     align-items: center;
@@ -239,7 +243,7 @@
 
   /* ── LIVE TICKER ──────────────────────── */
   .live-ticker {
-    background: #CC0000;
+    background: var(--muk-red);
     overflow: hidden;
     white-space: nowrap;
   }
@@ -518,7 +522,7 @@
 
   /* ── LIVE BADGE ──────────────────────── */
   .live-badge {
-    background: #CC0000;
+    background: var(--muk-red);
     color: #fff;
     font-size: 10px;
     font-weight: 800;
@@ -735,7 +739,7 @@
             <a href="{{ route('live') }}" class="nav-link live-link">● LIVE</a>
             <a href="{{ route('standings') }}" class="nav-link">Standings</a>
             @if(auth()->user()->role === 'coach')
-                <a href="{{ route('venues.index') }}" class="nav-link" style="background:#CC0000; color:#fff;">🏟 Book Venue</a>
+                <a href="{{ route('venues.index') }}" class="nav-link" style="background:var(--muk-red); color:#fff;">🏟 Book Venue</a>
                 <a href="{{ route('coach.profile') }}" class="nav-link">Profile</a>
                 <a href="{{ route('coach.stats') }}" class="nav-link">My Stats</a>
             @endif
