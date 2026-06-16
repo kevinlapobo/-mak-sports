@@ -5,10 +5,14 @@ namespace App\Livewire\Coach;
 use App\Models\User;
 use App\Models\Coach;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class Profile extends Component
 {
+    use WithFileUploads;
+
     public User $user;
     public string $full_name = '';
     public string $phone = '';
@@ -16,6 +20,7 @@ class Profile extends Component
     public ?string $specialization = '';
     public ?string $experience_years = '';
     public ?string $qualification = '';
+    public $newPhoto = null;
 
     public function mount(): void
     {
@@ -40,12 +45,22 @@ class Profile extends Component
             'specialization' => 'nullable|string|max:255',
             'experience_years' => 'nullable|integer|min:0',
             'qualification' => 'nullable|string',
+            'newPhoto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        $this->user->update([
+        $data = [
             'full_name' => $this->full_name,
             'phone' => $this->phone,
-        ]);
+        ];
+
+        if ($this->newPhoto) {
+            if ($this->user->photo) {
+                Storage::disk('public')->delete($this->user->photo);
+            }
+            $data['photo'] = $this->newPhoto->store('photos', 'public');
+        }
+
+        $this->user->update($data);
 
         if ($this->user->coach_id) {
             $coach = Coach::where('id', $this->user->coach_id)->first();
@@ -65,6 +80,7 @@ class Profile extends Component
             $this->user->save();
         }
 
+        $this->newPhoto = null;
         session()->flash('success', 'Profile updated successfully!');
     }
 

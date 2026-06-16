@@ -1,9 +1,53 @@
 <x-layouts.auth :title="'Dashboard'" :heading="'My Dashboard'">
+    @php $user = auth()->user(); $photoUrl = $user->photo ? Storage::url($user->photo) : null; @endphp
+
+    {{-- SUCCESS MODAL after registration --}}
+    @if(session('registration_success'))
+    <div id="successModal" style="position:fixed; inset:0; z-index:9999; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,.5); backdrop-filter:blur(4px); padding:20px;">
+        <div style="background:#fff; border-radius:20px; max-width:420px; width:100%; padding:32px 24px; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,.3); animation:popIn .3s ease-out;">
+            <div style="width:64px; height:64px; border-radius:50%; background:#f0fdf4; display:flex; align-items:center; justify-content:center; margin:0 auto 16px;">
+                <span style="font-size:32px;">✅</span>
+            </div>
+            <h2 style="font-size:20px; font-weight:900; color:#111; margin-bottom:4px;">Account Created!</h2>
+            <p style="font-size:14px; color:#6b7280; line-height:1.6; margin-bottom:16px;">
+                @if($user->isPending())
+                Your account has been created and is awaiting approval by a Facility Manager. You'll be notified once approved.
+                @else
+                Welcome to Makerere Sports! Start exploring live scores, fixtures, and more.
+                @endif
+            </p>
+            <button onclick="document.getElementById('successModal').remove()" style="background:var(--muk-green, #28A745); color:#fff; border:none; padding:12px 28px; border-radius:10px; font-size:14px; font-weight:700; cursor:pointer; transition:background .15s;" onmouseover="this.style.background='#1e7e34'" onmouseout="this.style.background='#28A745'">Got it!</button>
+        </div>
+    </div>
+    <style>
+        @keyframes popIn { from { transform:scale(.9); opacity:0; } to { transform:scale(1); opacity:1; } }
+    </style>
+    @endif
+
+    {{-- PENDING WARNING BANNER --}}
+    @if($user->isPending())
+    <div style="background:#fef3c7; border:1px solid #f59e0b; border-radius:12px; padding:14px 16px; margin-bottom:16px; display:flex; align-items:center; gap:10px;">
+        <span style="font-size:20px;">⏳</span>
+        <div style="font-size:13px; color:#92400e; line-height:1.5;">
+            <strong>Account Pending Approval</strong> — Your account is awaiting approval by a Facility Manager. Some features may be limited until approved.
+        </div>
+    </div>
+    @endif
+
     <div class="space-y-6">
-        {{-- Welcome Banner --}}
-        <div class="mak-green rounded-xl p-6 text-white">
-            <h3 class="text-xl font-bold">Welcome back, {{ auth()->user()->name }}!</h3>
-            <p class="mt-1 text-green-100">Role: <span class="font-semibold capitalize">{{ auth()->user()->role }}</span></p>
+        {{-- Welcome Banner with Photo --}}
+        <div class="mak-green rounded-xl p-6 text-white" style="display:flex; align-items:center; gap:16px;">
+            <div style="width:56px; height:56px; border-radius:50%; background:var(--muk-gold); color:var(--muk-black); display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:900; flex-shrink:0; border:3px solid rgba(255,255,255,.3); overflow:hidden;">
+                @if($photoUrl)
+                <img src="{{ $photoUrl }}" style="width:100%;height:100%;object-fit:cover;">
+                @else
+                {{ strtoupper(substr($user->name, 0, 1)) }}
+                @endif
+            </div>
+            <div>
+                <h3 class="text-xl font-bold">Welcome back, {{ $user->name }}!</h3>
+                <p class="mt-1 text-green-100">Role: <span class="font-semibold capitalize">{{ str_replace('_', ' ', $user->role) }}</span></p>
+            </div>
         </div>
 
         {{-- Quick Stats --}}
@@ -27,7 +71,7 @@
         </div>
 
         {{-- Role-Specific Content --}}
-        @if(auth()->user()->isStudent())
+        @if($user->isStudent())
             <div class="bg-white border border-gray-200 rounded-xl p-6">
                 <h4 class="text-lg font-bold text-gray-900 mb-4">Your Sports Overview</h4>
                 <div class="space-y-3">
@@ -45,23 +89,47 @@
                     </a>
                 </div>
             </div>
-        @elseif(auth()->user()->isPlayer())
+        @elseif($user->isPlayer())
             <div class="bg-white border border-gray-200 rounded-xl p-6">
-                <h4 class="text-lg font-bold text-gray-900 mb-4">Player Dashboard</h4>
-                <div class="space-y-3">
-                    <div class="p-3 bg-green-50 rounded-lg">
-                        <div class="font-semibold text-[#28A745]">My Stats</div>
-                        <div class="text-sm text-gray-600">Your performance statistics will appear here once linked to a player profile</div>
+                <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+                    <div style="width:48px; height:48px; border-radius:50%; background:var(--muk-green); color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:800; flex-shrink:0; overflow:hidden;">
+                        @if($photoUrl)
+                        <img src="{{ $photoUrl }}" style="width:100%;height:100%;object-fit:cover;">
+                        @else
+                        {{ strtoupper(substr($user->name, 0, 1)) }}
+                        @endif
                     </div>
+                    <div>
+                        <h4 class="text-lg font-bold text-gray-900">Player Dashboard</h4>
+                        <p class="text-sm text-gray-500">{{ $user->name }}</p>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <a href="{{ route('player.profile') }}" class="block p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                        <div class="font-semibold text-[#28A745]">My Profile</div>
+                        <div class="text-sm text-gray-600">View and edit your player profile</div>
+                    </a>
                     <a href="{{ route('teams') }}" class="block p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
                         <div class="font-semibold text-[#28A745]">My Team</div>
                         <div class="text-sm text-gray-600">View your team's information</div>
                     </a>
                 </div>
             </div>
-        @elseif(auth()->user()->isCoach())
+        @elseif($user->isCoach())
             <div class="bg-white border border-gray-200 rounded-xl p-6">
-                <h4 class="text-lg font-bold text-gray-900 mb-4">Coach Dashboard</h4>
+                <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+                    <div style="width:48px; height:48px; border-radius:50%; background:var(--muk-green); color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:800; flex-shrink:0; overflow:hidden;">
+                        @if($photoUrl)
+                        <img src="{{ $photoUrl }}" style="width:100%;height:100%;object-fit:cover;">
+                        @else
+                        {{ strtoupper(substr($user->name, 0, 1)) }}
+                        @endif
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold text-gray-900">Coach Dashboard</h4>
+                        <p class="text-sm text-gray-500">{{ $user->name }}</p>
+                    </div>
+                </div>
                 <div class="space-y-3">
                     <a href="{{ route('standings') }}" class="block p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
                         <div class="font-semibold text-[#28A745]">Competition Standings</div>
@@ -71,14 +139,21 @@
                         <div class="font-semibold text-[#28A745]">Upcoming Fixtures</div>
                         <div class="text-sm text-gray-600">Plan for upcoming matches</div>
                     </a>
-                    <a href="{{ route('teams') }}" class="block p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
-                        <div class="font-semibold text-[#28A745]">Team Management</div>
-                        <div class="text-sm text-gray-600">View and manage your team roster</div>
+                    <a href="{{ route('coach.my-teams') }}" class="block p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                        <div class="font-semibold text-[#28A745]">My Teams</div>
+                        <div class="text-sm text-gray-600">Register and manage your teams</div>
+                    </a>
+                    <a href="{{ route('coach.profile') }}" class="block p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                        <div class="font-semibold text-[#28A745]">Coach Profile</div>
+                        <div class="text-sm text-gray-600">Update your coaching profile</div>
+                    </a>
+                    <a href="{{ route('coach.stats') }}" class="block p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                        <div class="font-semibold text-[#28A745]">My Stats</div>
+                        <div class="text-sm text-gray-600">View your coaching statistics</div>
                     </a>
                 </div>
             </div>
 
-            {{-- Recent Competitions (Coach Only) --}}
             @if(isset($recentCompetitions) && $recentCompetitions->count() > 0)
             <div class="bg-white border border-gray-200 rounded-xl p-6">
                 <h4 class="text-lg font-bold text-gray-900 mb-4">Recent & Active Competitions</h4>
@@ -118,6 +193,44 @@
                 </div>
             </div>
             @endif
+        @elseif($user->isFacilityManager())
+            <div class="bg-white border border-gray-200 rounded-xl p-6">
+                <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+                    <div style="width:48px; height:48px; border-radius:50%; background:var(--muk-gold); color:var(--muk-black); display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:800; flex-shrink:0; overflow:hidden;">
+                        @if($photoUrl)
+                        <img src="{{ $photoUrl }}" style="width:100%;height:100%;object-fit:cover;">
+                        @else
+                        {{ strtoupper(substr($user->name, 0, 1)) }}
+                        @endif
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold text-gray-900">Facility Manager Dashboard</h4>
+                        <p class="text-sm text-gray-500">Full system access</p>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <a href="{{ route('facility.approvals') }}" class="block p-3 bg-amber-50 rounded-lg hover:bg-amber-100 transition-colors" style="border:1px solid #f59e0b;">
+                        <div class="font-semibold text-amber-600">⏳ Pending Approvals</div>
+                        <div class="text-sm text-gray-600">Approve or reject new player and coach registrations</div>
+                    </a>
+                    <a href="{{ route('standings') }}" class="block p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                        <div class="font-semibold text-[#28A745]">Standings</div>
+                        <div class="text-sm text-gray-600">Manage competition standings</div>
+                    </a>
+                    <a href="{{ route('fixtures') }}" class="block p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                        <div class="font-semibold text-[#28A745]">Fixtures</div>
+                        <div class="text-sm text-gray-600">View and manage fixtures</div>
+                    </a>
+                    <a href="{{ route('venues.index') }}" class="block p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                        <div class="font-semibold text-[#28A745]">🏟 Venues</div>
+                        <div class="text-sm text-gray-600">Manage venue bookings</div>
+                    </a>
+                    <a href="{{ route('teams') }}" class="block p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                        <div class="font-semibold text-[#28A745]">Teams</div>
+                        <div class="text-sm text-gray-600">View all teams</div>
+                    </a>
+                </div>
+            </div>
         @else
             <div class="bg-white border border-gray-200 rounded-xl p-6">
                 <h4 class="text-lg font-bold text-gray-900 mb-4">Follow Your Favorite Sports</h4>

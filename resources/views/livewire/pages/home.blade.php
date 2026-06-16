@@ -1,69 +1,30 @@
 <div>
 
-{{-- HERO SECTION WITH IMAGE SLIDER --}}
-<div class="hero-slider" id="heroSlider">
-    {{-- Slide 1: Person kicking a ball --}}
-    <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1461896836934-bd45ba8fcf9b?w=1600&q=80');">
-        <div class="hero-slide-overlay"></div>
-        <div class="hero-inner">
-            <div class="hero-left">
-                <div class="hero-badge">
-                    <span class="live-badge" style="background:var(--muk-red); color:#fff;">
-                        @if($liveMatches->count() > 0) ● {{ $liveMatches->count() }} LIVE @else MAK SPORTS @endif
-                    </span>
-                </div>
-                <div class="hero-label">Official Makerere University Sports Platform</div>
-                <h1>Makerere<br />University<br /><span>Sports</span></h1>
-                <p>Live scores, fixtures, results and standings for all Makerere University sports. Free to view — register to unlock personalised features.</p>
-                <div class="hero-ctas">
-                    <a href="{{ route('live') }}" class="btn-hero">
-                        @if($liveMatches->count() > 0) Watch Live @else View Live Scores @endif
-                    </a>
-                    <a href="{{ route('fixtures') }}" class="btn-hero-outline">See Fixtures</a>
-                    <a href="{{ route('standings') }}" class="btn-hero-outline">Standings</a>
-                </div>
-                <div class="hero-stats">
-                    <div><div class="stat-num">{{ $stats['sports'] }}</div><div class="stat-label">Sports</div></div>
-                    <div><div class="stat-num">{{ $stats['teams'] }}</div><div class="stat-label">Teams</div></div>
-                    <div><div class="stat-num">{{ $stats['matches'] }}</div><div class="stat-label">Matches</div></div>
-                    <div><div class="stat-num">{{ $stats['players'] }}</div><div class="stat-label">Players</div></div>
-                </div>
+{{-- HERO SECTION — Stadium pitch --}}
+<div class="hero-static">
+    <div class="hero-inner">
+        <div class="hero-left">
+            <div class="hero-badge">
+                <span class="live-badge" style="background:var(--muk-red); color:#fff;">
+                    @if($liveMatches->count() > 0) ● {{ $liveMatches->count() }} LIVE @else MAK SPORTS @endif
+                </span>
             </div>
-            <div class="hero-right">@include('livewire.pages._hero_card', ['featuredMatch' => $featuredMatch])</div>
-        </div>
-    </div>
-
-    {{-- Slide 2: Stadium / Pitch --}}
-    <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1575361204480-aadea25e6e68?w=1600&q=80');">
-        <div class="hero-slide-overlay"></div>
-        <div class="hero-inner">
-            <div class="hero-left">
-                <div class="hero-badge">
-                    <span class="live-badge" style="background:var(--muk-red); color:#fff;">MAK SPORTS</span>
-                </div>
-                <div class="hero-label">Official Makerere University Sports Platform</div>
-                <h1>Home of<br />Champions<br /><span>#MUKSports</span></h1>
-                <p>From the pitch to the podium — follow every match, every goal, every victory. Makerere University sports at your fingertips.</p>
-                <div class="hero-ctas">
-                    <a href="{{ route('results') }}" class="btn-hero">Latest Results</a>
-                    <a href="{{ route('teams') }}" class="btn-hero-outline">Our Teams</a>
-                    <a href="{{ route('register') }}" class="btn-hero-outline">Join Now</a>
-                </div>
-                <div class="hero-stats">
-                    <div><div class="stat-num">{{ $stats['sports'] }}</div><div class="stat-label">Sports</div></div>
-                    <div><div class="stat-num">{{ $stats['teams'] }}</div><div class="stat-label">Teams</div></div>
-                    <div><div class="stat-num">{{ $stats['matches'] }}</div><div class="stat-label">Matches</div></div>
-                    <div><div class="stat-num">{{ $stats['players'] }}</div><div class="stat-label">Players</div></div>
-                </div>
+            <div class="hero-label">Official Makerere University Sports Platform</div>
+            <h1>Where Legends<br />Are Made<br /><span>#MUKPride</span></h1>
+            <p>Every match tells a story. Every athlete inspires. Join the legacy of Makerere University sports excellence.</p>
+            <div class="hero-ctas">
+                <a href="{{ route('standings') }}" class="btn-hero">View Standings</a>
+                <a href="{{ route('fixtures') }}" class="btn-hero-outline">Upcoming Matches</a>
+                <a href="{{ route('register') }}" class="btn-hero-outline">Join the Team</a>
             </div>
-            <div class="hero-right">@include('livewire.pages._hero_card', ['featuredMatch' => $featuredMatch])</div>
+            <div class="hero-stats">
+                <div><div class="stat-num">{{ $stats['sports'] }}</div><div class="stat-label">Sports</div></div>
+                <div><div class="stat-num">{{ $stats['teams'] }}</div><div class="stat-label">Teams</div></div>
+                <div><div class="stat-num">{{ $stats['matches'] }}</div><div class="stat-label">Matches</div></div>
+                <div><div class="stat-num">{{ $stats['players'] }}</div><div class="stat-label">Players</div></div>
+            </div>
         </div>
-    </div>
-
-    {{-- Slider navigation --}}
-    <div class="slider-nav">
-        <button class="slider-dot active" data-index="0"></button>
-        <button class="slider-dot" data-index="1"></button>
+        <div class="hero-right">@include('livewire.pages._hero_card', ['featuredMatch' => $featuredMatch])</div>
     </div>
 </div>
 
@@ -109,42 +70,47 @@
 {{-- MAIN CONTENT GRID --}}
 <div class="section" style="background:#f5f5f5;">
     <div class="container">
-        <div style="display:grid; grid-template-columns:2fr 1fr; gap:24px;">
+        <div class="home-grid" style="display:grid; grid-template-columns:2fr 1fr; gap:24px;">
 
             {{-- LEFT COLUMN --}}
             <div>
                 {{-- TODAY'S FIXTURES --}}
                 @if($todayFixtures->count() > 0)
-                <div style="margin-bottom:28px;">
-                    <div class="section-title">Today's Fixtures</div>
-                    <div class="section-heading">{{ today()->format('l, F j, Y') }}</div>
+                <div style="margin-bottom:28px;" class="reveal">
+                    <div style="display:flex; align-items:center; gap:12px; margin-bottom:4px;">
+                        <div class="section-title" style="margin-bottom:0;">Today's Fixtures</div>
+                        <span style="font-size:11px; color:#9ca3af; font-weight:500;">{{ today()->format('l, F j, Y') }}</span>
+                    </div>
                     <div style="margin-top:16px; display:flex; flex-direction:column; gap:10px;">
                         @foreach($todayFixtures->take(4) as $match)
-                        <a href="{{ route('match.detail', $match->id) }}" class="match-card">
-                            <div class="match-card-header">
-                                <span>{{ $match->competition->name ?? 'Friendly' }}</span>
-                                <span>{{ $match->match_date->format('H:i') }}</span>
+                        <a href="{{ route('match.detail', $match->id) }}" class="match-card" style="border-radius:12px; border:1px solid #e8e8e8; box-shadow:0 1px 4px rgba(0,0,0,.04);">
+                            <div class="match-card-header" style="background:linear-gradient(135deg, var(--muk-green) 0%, var(--muk-green-dark) 100%); padding:8px 14px;">
+                                <span style="display:flex; align-items:center; gap:6px; font-size:10px; font-weight:700; color:rgba(255,255,255,.85); text-transform:uppercase; letter-spacing:.5px;">
+                                    <span style="width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,.4);"></span>
+                                    {{ $match->competition->name ?? 'Friendly' }}
+                                </span>
+                                <span style="background:rgba(255,255,255,.15); padding:2px 8px; border-radius:4px; font-size:10px; font-weight:700; color:#fff;">{{ $match->match_date->format('H:i') }}</span>
                             </div>
-                            <div class="match-card-body">
-                                <div class="team-side">
-                                    <div class="team-logo">{{ strtoupper(substr($match->homeTeam->name, 0, 2)) }}</div>
-                                    <div class="team-name">{{ $match->homeTeam->name }}</div>
+                            <div class="match-card-body" style="padding:16px 14px;">
+                                <div class="team-side" style="flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; text-align:center;">
+                                    <div class="team-logo" style="width:40px; height:40px; border-radius:50%; background:var(--muk-green); display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:800; color:#fff;">{{ strtoupper(substr($match->homeTeam->name, 0, 2)) }}</div>
+                                    <div class="team-name" style="font-size:13px; font-weight:700; color:#111; line-height:1.2;">{{ $match->homeTeam->name }}</div>
                                 </div>
-                                <div class="vs-box">
-                                    <div class="vs">VS</div>
-                                    <div class="time">{{ $match->match_date->format('H:i') }}</div>
+                                <div class="vs-box" style="background:#f8fafc; border:1px solid #e8e8e8; border-radius:10px; padding:10px 18px; text-align:center; flex-shrink:0;">
+                                    <div class="vs" style="font-size:13px; font-weight:800; color:#6b7280;">VS</div>
+                                    <div class="time" style="font-size:12px; font-weight:700; color:var(--muk-green); margin-top:2px;">{{ $match->match_date->format('H:i') }}</div>
                                 </div>
-                                <div class="team-side">
-                                    <div class="team-logo">{{ strtoupper(substr($match->awayTeam->name, 0, 2)) }}</div>
-                                    <div class="team-name">{{ $match->awayTeam->name }}</div>
+                                <div class="team-side" style="flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; text-align:center;">
+                                    <div class="team-logo" style="width:40px; height:40px; border-radius:50%; background:var(--muk-green); display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:800; color:#fff;">{{ strtoupper(substr($match->awayTeam->name, 0, 2)) }}</div>
+                                    <div class="team-name" style="font-size:13px; font-weight:700; color:#111; line-height:1.2;">{{ $match->awayTeam->name }}</div>
                                 </div>
                             </div>
                         </a>
                         @endforeach
                     </div>
                     @if($todayFixtures->count() > 4)
-                    <a href="{{ route('fixtures') }}" style="display:block; text-align:center; margin-top:12px; font-size:13px; color:var(--muk-green); font-weight:700; text-decoration:none;">
-                        View all fixtures →
+                    <a href="{{ route('fixtures') }}" style="display:block; text-align:center; margin-top:14px; font-size:13px; color:var(--muk-green); font-weight:700; text-decoration:none; padding:10px; background:#f9fafb; border-radius:10px; transition:background .15s;" onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background='#f9fafb'">
+                        View all {{ $todayFixtures->count() }} fixtures today →
                     </a>
                     @endif
                 </div>
@@ -152,31 +118,32 @@
 
                 {{-- RECENT RESULTS --}}
                 @if($recentResults->count() > 0)
-                <div>
-                    <div class="section-title">Recent Results</div>
-                    <div class="section-heading">Latest Match Outcomes</div>
+                <div class="reveal">
+                    <div style="display:flex; align-items:center; gap:12px; margin-bottom:4px;">
+                        <div class="section-title" style="margin-bottom:0;">Recent Results</div>
+                    </div>
                     <div style="margin-top:16px; display:grid; grid-template-columns:repeat(2, 1fr); gap:12px;">
                         @foreach($recentResults->take(4) as $match)
-                        <a href="{{ route('match.detail', $match->id) }}" class="match-card">
-                            <div class="match-card-header" style="background:#111;">
-                                <span>{{ $match->competition->name ?? '' }}</span>
-                                <span>FT</span>
+                        <a href="{{ route('match.detail', $match->id) }}" class="match-card" style="border-radius:12px; border:1px solid #e8e8e8; box-shadow:0 1px 4px rgba(0,0,0,.04);">
+                            <div class="match-card-header" style="background:#1a1a2e; padding:6px 12px;">
+                                <span style="font-size:9px; font-weight:700; color:rgba(255,255,255,.6); text-transform:uppercase;">{{ $match->competition->name ?? '' }}</span>
+                                <span style="font-size:9px; font-weight:800; color:var(--muk-gold);">FT</span>
                             </div>
-                            <div class="match-card-body" style="padding:14px 12px;">
-                                <div class="team-side">
-                                    <div class="team-name" style="font-size:12px;">{{ $match->homeTeam->name }}</div>
+                            <div class="match-card-body" style="padding:12px 10px; display:flex; align-items:center; gap:6px;">
+                                <div class="team-side" style="flex:1; text-align:center;">
+                                    <div class="team-name" style="font-size:11px; font-weight:700; color:#111;">{{ $match->homeTeam->name }}</div>
                                 </div>
-                                <div class="score-box" style="padding:8px 12px;">
-                                    <div class="score" style="font-size:20px;">{{ $match->home_score }}-{{ $match->away_score }}</div>
+                                <div class="score-box" style="background:var(--muk-black); color:#fff; border-radius:8px; padding:6px 12px; text-align:center; flex-shrink:0;">
+                                    <div class="score" style="font-size:18px; font-weight:900; letter-spacing:2px; line-height:1;">{{ $match->home_score }}-{{ $match->away_score }}</div>
                                 </div>
-                                <div class="team-side">
-                                    <div class="team-name" style="font-size:12px;">{{ $match->awayTeam->name }}</div>
+                                <div class="team-side" style="flex:1; text-align:center;">
+                                    <div class="team-name" style="font-size:11px; font-weight:700; color:#111;">{{ $match->awayTeam->name }}</div>
                                 </div>
                             </div>
                         </a>
                         @endforeach
                     </div>
-                    <a href="{{ route('results') }}" style="display:block; text-align:center; margin-top:12px; font-size:13px; color:var(--muk-green); font-weight:700; text-decoration:none;">
+                    <a href="{{ route('results') }}" style="display:block; text-align:center; margin-top:14px; font-size:13px; color:var(--muk-green); font-weight:700; text-decoration:none; padding:10px; background:#f9fafb; border-radius:10px; transition:background .15s;" onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background='#f9fafb'">
                         View all results →
                     </a>
                 </div>
@@ -185,86 +152,47 @@
 
             {{-- RIGHT COLUMN --}}
             <div>
-                {{-- STANDINGS PREVIEW (auth only) --}}
-                @auth
-                @if($standingsPreview->count() > 0)
-                <div style="background:#fff; border-radius:14px; border:1px solid #e8e8e8; overflow:hidden; margin-bottom:20px;">
-                    <div style="background:var(--muk-green); padding:12px 16px;">
-                        <div style="font-size:14px; font-weight:800; color:#fff;">
-                            {{ $topCompetition->name ?? 'League' }} Standings
-                        </div>
-                    </div>
-                    <table class="standings-table">
-                        <thead>
-                            <tr>
-                                <th style="text-align:left;">#</th>
-                                <th style="text-align:left;">Team</th>
-                                <th>P</th>
-                                <th>GD</th>
-                                <th>Pts</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($standingsPreview as $i => $standing)
-                            <tr class="{{ $i < 3 ? 'top3' : '' }}">
-                                <td class="pos">{{ $i + 1 }}</td>
-                                <td style="font-size:12px; font-weight:600;">{{ $standing->team->name ?? 'N/A' }}</td>
-                                <td>{{ $standing->played ?? 0 }}</td>
-                                <td style="color:{{ ($standing->goal_difference ?? 0) >= 0 ? 'var(--muk-green)' : 'var(--muk-red)' }}; font-weight:600;">{{ $standing->goal_difference ?? 0 }}</td>
-                                <td class="pts">{{ $standing->points ?? 0 }}</td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                    <a href="{{ route('standings') }}" style="display:block; text-align:center; padding:10px; font-size:12px; color:var(--muk-green); font-weight:700; text-decoration:none; border-top:1px solid #f0f0f0;">
-                        View full standings →
-                    </a>
-                </div>
-                @endif
-                @endauth
-
-                @guest
-                {{-- LOGIN PROMPT FOR GUESTS --}}
-                <div style="background:linear-gradient(135deg, var(--muk-red) 0%, #990000 100%); border-radius:14px; overflow:hidden; margin-bottom:20px; padding:24px; text-align:center;">
-                    <div style="font-size:32px; margin-bottom:8px;">🔒</div>
-                    <div style="font-size:16px; font-weight:800; color:#fff; margin-bottom:4px;">Live Scores & Standings</div>
-                    <div style="font-size:12px; color:rgba(255,255,255,.7); margin-bottom:16px;">Sign in or create a free account to view live scores, league standings, and personalised content.</div>
-                    <a href="{{ route('login') }}" style="display:inline-block; background:#fff; color:var(--muk-red); padding:10px 20px; border-radius:8px; font-size:13px; font-weight:700; text-decoration:none; margin-right:8px;">Sign In</a>
-                    <a href="{{ route('register') }}" style="display:inline-block; background:rgba(255,255,255,.15); color:#fff; border:1.5px solid rgba(255,255,255,.3); padding:10px 20px; border-radius:8px; font-size:13px; font-weight:700; text-decoration:none;">Register</a>
-                </div>
-                @endguest
-
-                {{-- TOP SCORERS --}}
+                {{-- TOP SCORERS TABLE --}}
                 @if($topScorers->count() > 0)
-                <div style="background:#fff; border-radius:14px; border:1px solid #e8e8e8; overflow:hidden; margin-bottom:20px;">
-                    <div style="background:var(--muk-green); padding:12px 16px;">
-                        <div style="font-size:14px; font-weight:800; color:#fff;">⚽ Top Scorers</div>
+                <div class="reveal" style="background:#fff; border-radius:14px; border:1px solid #e8e8e8; overflow:hidden; margin-bottom:20px; box-shadow:0 2px 12px rgba(0,0,0,.06);">
+                    <div style="background:linear-gradient(135deg, var(--muk-green) 0%, var(--muk-green-dark) 100%); padding:14px 18px; display:flex; align-items:center; gap:10px;">
+                        <span style="font-size:18px;">⚽</span>
+                        <span style="font-size:15px; font-weight:800; color:#fff;">Top Scorers</span>
+                        <span style="margin-left:auto; font-size:11px; color:rgba(255,255,255,.6); font-weight:600;">Goals</span>
                     </div>
-                    <div style="padding:12px;">
-                        @foreach($topScorers as $i => $player)
-                        <div style="display:flex; align-items:center; gap:10px; padding:8px 0; {{ !$loop->last ? 'border-bottom:1px solid #f0f0f0;' : '' }}">
-                            <div style="font-size:12px; font-weight:800; color:#888; width:20px;">{{ $i + 1 }}</div>
-                            <div style="width:32px; height:32px; background:var(--muk-green); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; font-weight:700;">{{ strtoupper(substr($player->name, 0, 1)) }}</div>
-                            <div style="flex:1;">
-                                <div style="font-size:13px; font-weight:600;">{{ $player->name }}</div>
+                    <div style="padding:4px 0;">
+                        @php $medals = ['🥇', '🥈', '🥉']; @endphp
+                        @foreach($topScorers->take(10) as $i => $player)
+                        <div style="display:flex; align-items:center; gap:12px; padding:10px 16px; {{ !$loop->last ? 'border-bottom:1px solid #f3f4f6;' : '' }} transition:background .15s;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background=''">
+                            <div style="width:28px; text-align:center; font-size:{{ $i < 3 ? '16px' : '14px' }}; font-weight:{{ $i < 3 ? '800' : '600' }}; color:{{ $i < 3 ? '#111' : '#9ca3af' }};">
+                                @if($i < 3) {!! $medals[$i] !!} @else {{ $i + 1 }} @endif
+                            </div>
+                            <div style="width:36px; height:36px; border-radius:50%; background:{{ $i === 0 ? 'linear-gradient(135deg,#f59e0b,#d97706)' : ($i === 1 ? 'linear-gradient(135deg,#9ca3af,#6b7280)' : ($i === 2 ? 'linear-gradient(135deg,#d97706,#92400e)' : 'var(--muk-green)')) }}; display:flex; align-items:center; justify-content:center; color:#fff; font-size:13px; font-weight:700; flex-shrink:0;">
+                                {{ strtoupper(substr($player->name, 0, 1)) }}
+                            </div>
+                            <div style="flex:1; min-width:0;">
+                                <div style="font-size:14px; font-weight:700; color:#111; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ $player->name }}</div>
                                 @if($player->team)
-                                <div style="font-size:10px; color:#888;">{{ $player->team->name }}</div>
+                                <div style="font-size:11px; color:#9ca3af;">{{ $player->team->name }}</div>
                                 @endif
                             </div>
-                            <div style="background:var(--muk-green); color:#fff; padding:4px 10px; border-radius:6px; font-size:14px; font-weight:800;">{{ $player->goals }}</div>
+                            <div style="background:{{ $i < 3 ? 'var(--muk-gold)' : 'var(--muk-green)' }}; color:{{ $i < 3 ? '#111' : '#fff' }}; min-width:36px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:800;">{{ $player->goals }}</div>
                         </div>
                         @endforeach
                     </div>
+                    @if($topScorers->count() > 10)
+                    <a href="{{ route('standings') }}" style="display:block; text-align:center; padding:10px; font-size:12px; color:var(--muk-green); font-weight:700; text-decoration:none; border-top:1px solid #f3f4f6;">View full standings →</a>
+                    @endif
                 </div>
                 @endif
 
                 {{-- QUICK LINKS --}}
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                    <a href="{{ route('live') }}" style="background:var(--muk-red); color:#fff; padding:16px; border-radius:12px; text-align:center; text-decoration:none;">
+                <div class="reveal" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <a href="{{ route('live') }}" style="background:var(--muk-red); color:#fff; padding:16px; border-radius:12px; text-align:center; text-decoration:none; transition:transform .15s; box-shadow:0 2px 8px rgba(238,0,0,.2);" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
                         <div style="font-size:24px; font-weight:900;">● LIVE</div>
                         <div style="font-size:11px; opacity:.8;">Live Scores</div>
                     </a>
-                    <a href="{{ route('teams') }}" style="background:#fff; border:1px solid #e5e7eb; padding:16px; border-radius:12px; text-align:center; text-decoration:none;">
+                    <a href="{{ route('teams') }}" style="background:#fff; border:1px solid #e5e7eb; padding:16px; border-radius:12px; text-align:center; text-decoration:none; transition:transform .15s, box-shadow .15s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(0,0,0,.08)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
                         <div style="font-size:24px; font-weight:900;">🏅</div>
                         <div style="font-size:11px; color:#888;">Teams</div>
                     </a>
@@ -277,7 +205,7 @@
 
 {{-- NEWS SLIDER SECTION --}}
 @if($latestNews->count() > 0)
-<div class="section" style="background:#fff;">
+<div class="section reveal" style="background:#fff;">
     <div class="container">
         <div class="section-title">Latest News</div>
         <div class="section-heading">Happening Around Campus</div>
@@ -306,7 +234,7 @@
 
 {{-- REGISTER CTA --}}
 @guest
-<div class="section" style="background:linear-gradient(135deg, var(--muk-red) 0%, #990000 100%); text-align:center;">
+<div class="section reveal" style="background:linear-gradient(135deg, var(--muk-red) 0%, #990000 100%); text-align:center;">
     <div class="container">
         <div style="font-size:28px; font-weight:900; color:#fff; margin-bottom:8px;">Get Your Personalised Sports Experience</div>
         <div style="font-size:15px; color:rgba(255,255,255,.7); margin-bottom:24px;">Register as a Student, Player, or Coach to access tailored content</div>
@@ -323,31 +251,23 @@
     100% { transform: translateX(-100%); }
 }
 
-/* ── HERO SLIDER ─────────────────── */
-.hero-slider {
+/* ── HERO SECTION ─────────────────── */
+.hero-static {
     position: relative;
     width: 100%;
     min-height: 100vh;
-    overflow: hidden;
-}
-.hero-slide {
-    position: absolute;
-    inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1575361204480-aadea25e6e68?w=1600&q=80');
     background-size: cover;
     background-position: center;
-    opacity: 0;
-    transition: opacity 1s ease;
     display: flex;
     align-items: center;
 }
-.hero-slide.active {
-    opacity: 1;
-    position: relative;
-}
-.hero-slide-overlay {
+.hero-static::after {
+    content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(0,0,0,.8) 0%, rgba(0,0,0,.5) 50%, rgba(0,0,0,.7) 100%);
+    background: rgba(0,0,0,.55);
+    z-index: 1;
 }
 .hero-inner {
     position: relative;
@@ -368,16 +288,26 @@
     text-transform: uppercase;
     letter-spacing: 1.5px;
     margin-bottom: 8px;
+    text-shadow: 0 1px 6px rgba(0,0,0,.6);
 }
-.hero-slide h1 {
+.hero-static h1 {
     font-size: clamp(36px, 5vw, 56px);
     font-weight: 900;
     color: #fff;
     line-height: 1.05;
     margin-bottom: 16px;
     letter-spacing: -1px;
+    text-shadow: 0 2px 12px rgba(0,0,0,.7);
 }
-.hero-slide h1 span { color: var(--muk-red); }
+.hero-static h1 span { color: var(--muk-red); text-shadow: 0 2px 12px rgba(0,0,0,.5); }
+.hero-static p {
+    font-size: 16px;
+    color: rgba(255,255,255,.9);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 28px;
+    text-shadow: 0 1px 8px rgba(0,0,0,.6);
+}
 .hero-stats {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -389,12 +319,14 @@
     font-size: 28px;
     font-weight: 900;
     color: var(--muk-red);
+    text-shadow: 0 1px 8px rgba(0,0,0,.6);
 }
 .stat-label {
     font-size: 11px;
     color: rgba(255,255,255,.6);
     text-transform: uppercase;
     letter-spacing: .5px;
+    text-shadow: 0 1px 6px rgba(0,0,0,.6);
 }
 
 /* HERO BUTTONS */
@@ -423,32 +355,6 @@
     display: inline-block;
 }
 .btn-hero-outline:hover { background: rgba(255,255,255,.2); }
-
-/* SLIDER NAV DOTS */
-.slider-nav {
-    position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 12px;
-    z-index: 10;
-}
-.slider-dot {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    border: 2px solid #fff;
-    background: transparent;
-    cursor: pointer;
-    transition: background .3s, transform .3s;
-    padding: 0;
-}
-.slider-dot.active {
-    background: var(--muk-red);
-    border-color: var(--muk-red);
-    transform: scale(1.2);
-}
 
 /* LIVE CARD */
 .live-card {
@@ -622,11 +528,58 @@
     transform: scale(1.3);
 }
 
+/* ── SCROLL REVEAL ─────────────────── */
+.reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .6s ease-out, transform .6s ease-out;
+}
+.reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 @media (max-width:900px) {
-    .hero-inner { grid-template-columns: 1fr; }
+    .hero-static { min-height: 70vh; }
+    .hero-inner { grid-template-columns: 1fr; padding: 100px 16px 40px; }
     .hero-right { display: none; }
-    .hero-stats { grid-template-columns: repeat(2, 1fr) !important; }
+    .hero-stats { grid-template-columns: repeat(2, 1fr) !important; gap: 12px; margin-top: 24px; max-width: 100%; }
+    .stat-num { font-size: 22px; }
+    .hero-static h1 { font-size: clamp(28px, 8vw, 36px); }
+    .hero-static p { font-size: 14px; }
+    .hero-ctas { flex-direction: column; gap: 10px; }
+    .hero-ctas a { text-align: center; }
     .slider-item { min-width: 220px; max-width: 220px; }
+}
+
+@media (max-width: 640px) {
+    .hero-static { min-height: 60vh; }
+    .hero-stats { grid-template-columns: repeat(2, 1fr) !important; }
+    .hero-label { font-size: 10px; }
+}
+
+/* Responsive content grid */
+@media (max-width: 768px) {
+    .home-grid { grid-template-columns: 1fr !important; }
+    .match-card-body { padding: 12px 10px !important; }
+    .team-name { font-size: 11px !important; }
+    .score-box { padding: 6px 10px !important; }
+    .score-box .score { font-size: 18px !important; }
+    .news-slider { gap: 12px; }
+    .slider-item { min-width: 200px; max-width: 200px; }
+    .section { padding: 32px 16px !important; }
+    [style*="grid-template-columns:repeat(2, 1fr)"] { grid-template-columns: 1fr !important; }}
+
+@media (max-width: 480px) {
+    .hero-stats { max-width: 100% !important; }
+    .hero-ctas a { width: 100%; text-align: center; box-sizing: border-box; }
+    .stat-num { font-size: 20px !important; }
+    .hero-static h1 { font-size: 24px !important; }
+    .section-title { font-size: 11px !important; }
+    .reveal .match-card { margin: 0; }
+    [style*="grid-template-columns:repeat(2, 1fr)"] { grid-template-columns: 1fr !important; }
+    .slider-item { min-width: 160px; max-width: 160px; }
+    .btn-hero, .btn-hero-outline { width: 100%; text-align: center; }
 }
 </style>
 
@@ -706,42 +659,5 @@
     startAuto();
 })();
 
-/* ── HERO SLIDER ── */
-(function() {
-    var hero = document.getElementById('heroSlider');
-    if (!hero) return;
-    var slides = hero.querySelectorAll('.hero-slide');
-    var dots = hero.querySelectorAll('.slider-dot');
-    if (!slides.length) return;
-    var current = 0;
-    var timer;
 
-    function goTo(idx) {
-        slides.forEach(function(s, i) {
-            s.classList.toggle('active', i === idx);
-        });
-        dots.forEach(function(d, i) {
-            d.classList.toggle('active', i === idx);
-        });
-        current = idx;
-    }
-
-    function next() {
-        goTo((current + 1) % slides.length);
-    }
-
-    dots.forEach(function(dot) {
-        dot.addEventListener('click', function() {
-            goTo(parseInt(this.getAttribute('data-index')));
-            resetTimer();
-        });
-    });
-
-    function resetTimer() {
-        clearInterval(timer);
-        timer = setInterval(next, 6000);
-    }
-
-    timer = setInterval(next, 6000);
-})();
 </script>

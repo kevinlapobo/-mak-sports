@@ -8,12 +8,13 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
-#[Fillable(['name', 'email', 'password', 'role', 'full_name', 'phone', 'player_id', 'coach_id', 'team_id', 'google_id'])]
+#[Fillable(['name', 'email', 'password', 'role', 'full_name', 'phone', 'player_id', 'coach_id', 'team_id', 'google_id', 'student_number', 'photo', 'status'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
 
     protected function casts(): array
     {
@@ -41,6 +42,21 @@ class User extends Authenticatable
     public function isSpectator(): bool
     {
         return $this->role === 'spectator';
+    }
+
+    public function isFacilityManager(): bool
+    {
+        return $this->role === 'facility_manager';
+    }
+
+    public function isPending(): bool
+    {
+        return $this->status === 'pending';
+    }
+
+    public function isApproved(): bool
+    {
+        return $this->status === 'approved';
     }
 
     public function player()

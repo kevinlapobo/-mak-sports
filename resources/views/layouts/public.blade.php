@@ -49,6 +49,9 @@
     border-bottom-color: transparent;
     box-shadow: none;
   }
+  #main-nav.with-hero .nav-link {
+    text-shadow: 0 1px 6px rgba(0,0,0,.6);
+  }
   #main-nav.scrolled {
     background: var(--muk-green);
     border-bottom-color: var(--muk-red);
@@ -130,9 +133,11 @@
   .mobile-nav {
     display: none;
     background: var(--muk-green-dark);
-    padding: 12px 16px;
+    padding: 12px 16px 20px;
     flex-direction: column;
     gap: 4px;
+    max-height: calc(100vh - 64px);
+    overflow-y: auto;
   }
   .mobile-nav.open { display: flex; }
 
@@ -520,6 +525,17 @@
     color: #888;
   }
 
+  /* ── SCROLL REVEAL ─────────────────── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .6s ease-out, transform .6s ease-out;
+  }
+  .reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
   /* ── LIVE BADGE ──────────────────────── */
   .live-badge {
     background: var(--muk-red);
@@ -612,10 +628,39 @@
   }
   .social-link:hover { background: var(--muk-gold); }
 
+  /* ── RESPONSIVE OVERFLOW FIXES ────── */
+  img, video, iframe { max-width: 100%; height: auto; }
+  table { width: 100%; }
+  [style*="overflow-x:auto"] { -webkit-overflow-scrolling: touch; }
+  pre, code { white-space: pre-wrap; word-break: break-word; }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; }
+  [style*="white-space:nowrap"] { max-width: 100%; }
+  [style*="display:grid"] { box-sizing: border-box; }
+  [style*="padding:0 16px"],[style*="padding:0 20px"] { box-sizing: border-box; }
+
   /* ── RESPONSIVE ──────────────────────── */
-  @media (max-width: 768px) {
+  @media (max-width: 1100px) {
     .nav-links { display: none; }
     .mobile-menu-btn { display: block; }
+    .nav-logo-text .title { font-size: 14px; }
+    .nav-logo img { height: 34px; }
+    #main-nav { height: 56px; }
+    #main-nav .nav-inner { padding: 0 12px; }
+  }
+  @media (max-width: 768px) {
+    .nav-logo-text .sub { display: none; }
+    .nav-logo img { height: 30px; }
+    .footer-top { grid-template-columns: 1fr 1fr !important; gap: 20px !important; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+  }
+  @media (max-width: 480px) {
+    .nav-logo-text .title { font-size: 13px; }
+    .footer-top { grid-template-columns: 1fr !important; }
+    .nav-logo-text .sub { display: none; }
+    .nav-logo img { height: 28px; }
+    #main-nav { height: 50px; }
+  }
+  @media (max-width: 768px) {
     .footer-top { grid-template-columns: 1fr 1fr; gap: 24px; }
     .hero h1 { font-size: 28px; }
   }
@@ -688,6 +733,10 @@
                        style="background:rgba(204,0,0,.8); color:#fff;">
                        🏟 Book Venue
                     </a>
+                    <a href="{{ route('coach.my-teams') }}"
+                       class="nav-link {{ request()->routeIs('coach.my-teams') ? 'active' : '' }}">
+                       My Teams
+                    </a>
                     <a href="{{ route('coach.profile') }}"
                        class="nav-link {{ request()->routeIs('coach.profile') ? 'active' : '' }}">
                        Profile
@@ -697,12 +746,29 @@
                        My Stats
                     </a>
                 @endif
+                @if(auth()->user()->role === 'player')
+                    <a href="{{ route('player.profile') }}"
+                       class="nav-link {{ request()->routeIs('player.profile') ? 'active' : '' }}">
+                       Profile
+                    </a>
+                @endif
+                @if(auth()->user()->role === 'facility_manager')
+                    <a href="{{ route('facility.approvals') }}"
+                       class="nav-link {{ request()->routeIs('facility.approvals') ? 'active' : '' }}">
+                       👥 Approvals
+                    </a>
+                    <a href="{{ route('facility.venue-bookings') }}"
+                       class="nav-link {{ request()->routeIs('facility.venue-bookings') ? 'active' : '' }}">
+                       🏟 Bookings
+                    </a>
+                @endif
             @endauth
 
             {{-- Auth Links --}}
             @auth
                 <a href="{{ route('dashboard') }}"
-                   class="nav-link" style="background:rgba(255,215,0,.2); color:var(--muk-gold);">
+                   class="nav-link" style="display:flex; align-items:center; gap:6px; background:rgba(255,215,0,.2); color:var(--muk-gold);">
+                   <span style="width:26px; height:26px; border-radius:50%; background:var(--muk-gold); color:var(--muk-black); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; flex-shrink:0;">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
                    Dashboard
                 </a>
                 <form method="POST" action="{{ route('logout') }}" class="inline">
@@ -740,8 +806,16 @@
             <a href="{{ route('standings') }}" class="nav-link">Standings</a>
             @if(auth()->user()->role === 'coach')
                 <a href="{{ route('venues.index') }}" class="nav-link" style="background:var(--muk-red); color:#fff;">🏟 Book Venue</a>
+                <a href="{{ route('coach.my-teams') }}" class="nav-link">My Teams</a>
                 <a href="{{ route('coach.profile') }}" class="nav-link">Profile</a>
                 <a href="{{ route('coach.stats') }}" class="nav-link">My Stats</a>
+            @endif
+            @if(auth()->user()->role === 'player')
+                <a href="{{ route('player.profile') }}" class="nav-link">Profile</a>
+            @endif
+            @if(auth()->user()->role === 'facility_manager')
+                <a href="{{ route('facility.approvals') }}" class="nav-link">👥 Approvals</a>
+                <a href="{{ route('facility.venue-bookings') }}" class="nav-link">🏟 Bookings</a>
             @endif
             <a href="{{ route('dashboard') }}" class="nav-link" style="color:var(--muk-gold);">Dashboard</a>
             <form method="POST" action="{{ route('logout') }}">
@@ -758,9 +832,21 @@
 {{-- ═══════════════════════════════════
      MAIN CONTENT
      ═══════════════════════════════════ --}}
-<div style="padding-top:{{ request()->routeIs('home') ? '0' : '64px' }};">
+<div style="padding-top:{{ request()->routeIs('home') ? '0' : '64px' }};" id="main-content">
 {{ $slot }}
 </div>
+<script>
+// Adjust padding when navbar height changes on resize
+function adjustPadding() {
+    var nav = document.getElementById('main-nav');
+    var content = document.getElementById('main-content');
+    if (nav && content && !document.querySelector('.hero-static')) {
+        content.style.paddingTop = nav.offsetHeight + 'px';
+    }
+}
+window.addEventListener('resize', adjustPadding);
+window.addEventListener('load', adjustPadding);
+</script>
 
 {{-- ═══════════════════════════════════
      FOOTER
@@ -875,20 +961,36 @@ setInterval(() => {
 }, 5000);
 @endif
 
+/* ── Fix inline style overflow ── */
+(function(){
+    function fixOverflow() {
+        document.querySelectorAll('[style*="grid-template-columns"], [style*="display:grid"]').forEach(function(el) {
+            if (el.offsetWidth > window.innerWidth && !el.classList.contains('responsive-grid')) {
+                el.style.overflowX = 'auto';
+                el.style.WebkitOverflowScrolling = 'touch';
+            }
+        });
+        document.querySelectorAll('[style*="overflow-x:auto"]').forEach(function(el) {
+            var wrapper = el.closest('[style*="max-width"]');
+            if (wrapper && wrapper.scrollWidth > wrapper.offsetWidth) {
+                wrapper.style.overflow = 'hidden';
+            }
+        });
+    }
+    window.addEventListener('load', fixOverflow);
+    window.addEventListener('resize', fixOverflow);
+})();
+
 /* ── Scroll reveal animation ── */
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
+            entry.target.classList.add('revealed');
         }
     });
 }, { threshold: 0.1 });
 
 document.querySelectorAll('.reveal').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = 'opacity .5s ease, transform .5s ease';
     observer.observe(el);
 });
 </script>

@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Str;
@@ -46,12 +47,25 @@ class AuthController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users', 'regex:/@/', function ($attribute, $value, $fail) {
+                if (!str_ends_with($value, '.com')) {
+                    $fail('The email must end with .com');
+                }
+            }],
             'password' => ['required', 'confirmed', Password::defaults()],
-            'role' => ['required', 'in:student,player,coach,spectator'],
+            'role' => ['required', 'in:student,player,coach'],
             'phone' => ['nullable', 'string', 'max:20'],
             'team_id' => ['nullable', 'exists:teams,id'],
+            'student_number' => ['nullable', 'string', 'max:50'],
+            'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
         ]);
+
+        $photoPath = null;
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('photos', 'public');
+        }
+
+        $status = in_array($validated['role'], ['player', 'coach']) ? 'pending' : 'approved';
 
         $user = User::create([
             'name' => $validated['name'],
@@ -61,11 +75,16 @@ class AuthController extends Controller
             'full_name' => $validated['name'],
             'phone' => $validated['phone'] ?? null,
             'team_id' => $validated['team_id'] ?? null,
+            'student_number' => $validated['student_number'] ?? null,
+            'photo' => $photoPath,
+            'status' => $status,
         ]);
 
         Auth::login($user);
 
-        return redirect()->route('home');
+        session()->flash('registration_success', true);
+
+        return redirect()->route('dashboard');
     }
 
     public function logout(Request $request)
@@ -119,7 +138,7 @@ class AuthController extends Controller
                         'name' => $googleUser->name,
                         'email' => $googleUser->email,
                         'google_id' => $googleUser->id,
-                        'role' => 'spectator',
+                        'role' => 'student',
                         'full_name' => $googleUser->name,
                         'password' => Hash::make(Str::random(32)),
                     ]);

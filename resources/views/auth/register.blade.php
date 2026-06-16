@@ -1,5 +1,5 @@
 <x-layouts.auth :title="'Register'" :heading="'Join Makerere Sports'" :subheading="'Create your account to access personalized sports content'">
-    <form class="space-y-5" method="POST" action="{{ route('register.post') }}">
+    <form class="space-y-5" method="POST" action="{{ route('register.post') }}" enctype="multipart/form-data">
         @csrf
 
         @if($errors->any())
@@ -16,10 +16,13 @@
         </div>
 
         <div>
-            <label for="email" class="block text-sm font-semibold text-gray-700">Email address</label>
+            <label for="email" class="block text-sm font-semibold text-gray-700">Email address <span class="text-red-500">*</span></label>
             <input id="email" name="email" type="email" autocomplete="email" required
                 class="mt-1 appearance-none block w-full px-3 py-2.5 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#28A745] focus:border-transparent"
-                value="{{ old('email') }}">
+                value="{{ old('email') }}"
+                pattern="[^@]+@[^@]+\.com$"
+                title="Email must contain @ and end with .com">
+            <p class="mt-1 text-xs text-gray-500">Must contain <strong>@</strong> and end with <strong>.com</strong></p>
         </div>
 
         <div>
@@ -38,8 +41,29 @@
                 <option value="student" {{ old('role') === 'student' ? 'selected' : '' }}>Student - View results, standings & upcoming matches</option>
                 <option value="player" {{ old('role') === 'player' ? 'selected' : '' }}>Player - Track your stats & performance</option>
                 <option value="coach" {{ old('role') === 'coach' ? 'selected' : '' }}>Coach - Manage team & view competitions</option>
-                <option value="spectator" {{ old('role') === 'spectator' ? 'selected' : '' }}>Fan/Spectator - Follow your favorite teams</option>
             </select>
+        </div>
+
+        <div id="studentNumberField" class="hidden">
+            <label for="student_number" class="block text-sm font-semibold text-gray-700">Student Number <span class="text-red-500">*</span></label>
+            <input id="student_number" name="student_number" type="text"
+                class="mt-1 appearance-none block w-full px-3 py-2.5 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#28A745] focus:border-transparent"
+                value="{{ old('student_number') }}"
+                placeholder="e.g. S22B13/001">
+        </div>
+
+        <div id="photoField" class="hidden">
+            <label for="photo" class="block text-sm font-semibold text-gray-700">Profile Photo</label>
+            <div class="mt-1 flex items-center gap-4">
+                <div id="photoPreview" style="width:56px; height:56px; border-radius:50%; background:#e5e7eb; display:flex; align-items:center; justify-content:center; font-size:20px; color:#888; overflow:hidden; flex-shrink:0; border:2px solid #e5e7eb;">
+                    📷
+                </div>
+                <label class="cursor-pointer bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                    Choose Photo
+                    <input id="photo" name="photo" type="file" accept="image/jpeg,image/png" class="hidden" onchange="previewPhoto(event)">
+                </label>
+            </div>
+            <p class="mt-1 text-xs text-gray-500">JPEG or PNG, max 2MB</p>
         </div>
 
         <div id="teamField" class="hidden">
@@ -80,11 +104,13 @@
         </div>
 
         <div>
-            <button type="submit"
-                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-white mak-green hover:bg-[#1e7e34] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#28A745] transition-colors">
+            <button type="submit" id="register-btn"
+                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-white mak-green hover:bg-[#1e7e34] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#28A745] transition-colors"
+                onclick="this.disabled=true; this.innerHTML='<span class=\'spinner\'></span> Creating Account...'; this.closest('form').submit();">
                 Create Account
             </button>
         </div>
+        <style>.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px;}@keyframes spin{to{transform:rotate(360deg)}}</style>
     </form>
 
     <div class="mt-6">
@@ -126,10 +152,31 @@
         function toggleRoleFields() {
             const role = document.getElementById('role').value;
             const teamField = document.getElementById('teamField');
+            const studentNumberField = document.getElementById('studentNumberField');
+            const photoField = document.getElementById('photoField');
             if (role === 'player' || role === 'coach') {
                 teamField.classList.remove('hidden');
+                photoField.classList.remove('hidden');
             } else {
                 teamField.classList.add('hidden');
+                photoField.classList.add('hidden');
+            }
+            if (role === 'student') {
+                studentNumberField.classList.remove('hidden');
+            } else {
+                studentNumberField.classList.add('hidden');
+            }
+        }
+        function previewPhoto(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('photoPreview');
+                    preview.innerHTML = '<img src="'+e.target.result+'" style="width:100%;height:100%;object-fit:cover;">';
+                    preview.style.background = 'none';
+                };
+                reader.readAsDataURL(file);
             }
         }
         document.addEventListener('DOMContentLoaded', toggleRoleFields);

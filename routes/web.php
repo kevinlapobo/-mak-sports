@@ -17,6 +17,10 @@ use App\Livewire\Venues\BookingReceipt;
 use App\Livewire\Venues\BookingPending;
 use App\Livewire\Coach\Profile as CoachProfile;
 use App\Livewire\Coach\Stats as CoachStats;
+use App\Livewire\Coach\MyTeams as CoachMyTeams;
+use App\Livewire\Player\Profile as PlayerProfile;
+use App\Livewire\Facility\Approvals as FacilityApprovals;
+use App\Livewire\Facility\VenueBookings as FacilityVenueBookings;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\BookingPrintController;
 
@@ -39,6 +43,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/venue-pending/{id}',      BookingPending::class)->name('venue.pending');
     Route::get('/coach/profile',           CoachProfile::class)->name('coach.profile');
     Route::get('/coach/stats',             CoachStats::class)->name('coach.stats');
+    Route::get('/coach/my-teams',          CoachMyTeams::class)->name('coach.my-teams');
+    Route::get('/player/profile',          PlayerProfile::class)->name('player.profile');
+    Route::get('/facility/approvals',      FacilityApprovals::class)->name('facility.approvals');
+    Route::get('/facility/venue-bookings', FacilityVenueBookings::class)->name('facility.venue-bookings');
 });
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
