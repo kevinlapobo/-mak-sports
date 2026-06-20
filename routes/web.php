@@ -11,6 +11,13 @@ use App\Livewire\Pages\TeamDetail;
 use App\Livewire\Pages\PlayerDetail;
 use App\Livewire\Pages\MatchDetail;
 use App\Livewire\Pages\NewsDetail;
+use App\Livewire\Pages\Contacts;
+use App\Livewire\Notifications\NotificationsPage;
+use App\Livewire\Admin\ManageFixtures;
+use App\Livewire\Admin\AddResults;
+use App\Livewire\Admin\PendingResults;
+use App\Livewire\Admin\NewTeams;
+use App\Livewire\Admin\ManageMatch;
 use App\Livewire\Venues\Index as VenuesIndex;
 use App\Livewire\Venues\BookVenue;
 use App\Livewire\Venues\BookingReceipt;
@@ -32,6 +39,7 @@ Route::get('/teams/{slug}',   TeamDetail::class)->name('team.detail');
 Route::get('/players/{id}',   PlayerDetail::class)->name('player.detail');
 Route::get('/matches/{id}',   MatchDetail::class)->name('match.detail');
 Route::get('/news/{id}',      NewsDetail::class)->name('news.detail');
+Route::get('/contact',        Contacts::class)->name('contact');
 
 Route::get('/live',       LiveScores::class)->name('live')->middleware('auth');
 Route::get('/standings',  Standings::class)->name('standings')->middleware('auth');
@@ -47,6 +55,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/player/profile',          PlayerProfile::class)->name('player.profile');
     Route::get('/facility/approvals',      FacilityApprovals::class)->name('facility.approvals');
     Route::get('/facility/venue-bookings', FacilityVenueBookings::class)->name('facility.venue-bookings');
+    Route::get('/notifications',           NotificationsPage::class)->name('notifications');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/manage/fixtures', ManageFixtures::class)->name('admin.manage-fixtures');
+    Route::get('/manage/results',  AddResults::class)->name('admin.add-results');
+    Route::get('/manage/pending',  PendingResults::class)->name('admin.pending-results');
+    Route::get('/manage/new-teams', NewTeams::class)->name('admin.new-teams');
+    Route::get('/manage/match/{id}', ManageMatch::class)->name('admin.manage-match');
 });
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');

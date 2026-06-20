@@ -1,8 +1,10 @@
 #!/bin/bash
 set -e
 
-# Ensure APP_KEY is set
-php artisan key:generate --force --quiet 2>/dev/null || true
+# Generate APP_KEY only if not already set
+if ! php artisan key:generate --show --quiet 2>/dev/null | grep -q .; then
+    php artisan key:generate --force --quiet 2>/dev/null || true
+fi
 
 # Clear all caches (avoids stale view/config/route issues)
 php artisan route:clear --quiet 2>/dev/null || true

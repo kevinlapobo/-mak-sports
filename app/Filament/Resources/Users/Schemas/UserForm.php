@@ -30,6 +30,7 @@ class UserForm
                         'player' => 'Player',
                         'coach' => 'Coach',
                         'facility_manager' => 'Facility Manager',
+                        'admin' => 'Admin',
                     ])
                     ->required(),
                 Select::make('status')
@@ -37,6 +38,7 @@ class UserForm
                         'pending' => 'Pending',
                         'approved' => 'Approved',
                     ])
+                    ->default('approved')
                     ->required(),
                 TextInput::make('student_number')
                     ->label('Student Number')
@@ -44,7 +46,7 @@ class UserForm
                 TextInput::make('password')
                     ->password()
                     ->hiddenOn('edit')
-                    ->required(),
+                    ->required(fn ($livewire) => $livewire instanceof \Filament\Resources\Pages\CreateRecord),
             ]);
     }
 }

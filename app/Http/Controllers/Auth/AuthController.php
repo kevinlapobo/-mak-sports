@@ -115,13 +115,16 @@ class AuthController extends Controller
 
     public function redirectToGoogle()
     {
-        return Socialite::driver('google')->redirect();
+        if (!env('GOOGLE_CLIENT_ID') || !env('GOOGLE_CLIENT_SECRET')) {
+            return redirect()->route('login')->withErrors(['email' => 'Google login is not configured. Please contact support.']);
+        }
+        return Socialite::driver('google')->stateless()->redirect();
     }
 
     public function handleGoogleCallback()
     {
         try {
-            $googleUser = Socialite::driver('google')->user();
+            $googleUser = Socialite::driver('google')->stateless()->user();
 
             $user = User::where('google_id', $googleUser->id)->first();
 
@@ -146,8 +149,14 @@ class AuthController extends Controller
                 }
             }
 
+            $request = request();
+            $request->session()->regenerate();
+
             return redirect()->intended(route('home'));
         } catch (\Exception $e) {
+            if (config('app.debug')) {
+                return redirect()->route('login')->withErrors(['email' => 'Google login failed: ' . $e->getMessage()]);
+            }
             return redirect()->route('login')->withErrors(['email' => 'Google login failed. Please try again.']);
         }
     }

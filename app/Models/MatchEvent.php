@@ -30,4 +30,9 @@ class MatchEvent extends Model
     {
         return $this->belongsTo(Team::class);
     }
+
+    public function getTypeAttribute(): string
+    {
+        return $this->event_type;
+    }
 }

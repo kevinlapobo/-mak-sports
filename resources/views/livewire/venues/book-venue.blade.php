@@ -95,8 +95,9 @@
                     <input type="email" wire:model="organizer_email" style="width:100%; padding:10px 12px; border:1px solid #e5e7eb; border-radius:8px; font-size:14px; background:#f9fafb;">
                 </div>
 
-                <button type="submit" style="width:100%; padding:14px; background:var(--muk-red); color:#fff; border:none; border-radius:10px; font-size:15px; font-weight:700; cursor:pointer;">
-                    {{ $booking_type === 'immediate' ? '⚡ Book Immediately — Get Receipt' : '📅 Submit for Approval' }}
+                <button type="submit" wire:loading.attr="disabled" style="width:100%; padding:14px; background:var(--muk-red); color:#fff; border:none; border-radius:10px; font-size:15px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+                    <span wire:loading.remove wire:target="submit">{{ $booking_type === 'immediate' ? '⚡ Book Immediately — Get Receipt' : '📅 Submit for Approval' }}</span>
+                    <span wire:loading wire:target="submit" style="display:flex; align-items:center; gap:6px;"><span style="width:16px;height:16px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite;display:inline-block;"></span> Processing...</span>
                 </button>
             </form>
         </div>

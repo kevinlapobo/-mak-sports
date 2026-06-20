@@ -11,7 +11,7 @@
             <h2 style="font-size:20px; font-weight:900; color:#111; margin-bottom:4px;">Account Created!</h2>
             <p style="font-size:14px; color:#6b7280; line-height:1.6; margin-bottom:16px;">
                 @if($user->isPending())
-                Your account has been created and is awaiting approval by a Facility Manager. You'll be notified once approved.
+                Your account has been created and is awaiting approval by an Administrator . You'll be notified once approved.
                 @else
                 Welcome to Makerere Sports! Start exploring live scores, fixtures, and more.
                 @endif
@@ -29,7 +29,7 @@
     <div style="background:#fef3c7; border:1px solid #f59e0b; border-radius:12px; padding:14px 16px; margin-bottom:16px; display:flex; align-items:center; gap:10px;">
         <span style="font-size:20px;">⏳</span>
         <div style="font-size:13px; color:#92400e; line-height:1.5;">
-            <strong>Account Pending Approval</strong> — Your account is awaiting approval by a Facility Manager. Some features may be limited until approved.
+            <strong>Account Pending Approval</strong> — Your account is awaiting approval by an administrator. Some features may be limited until approved.
         </div>
     </div>
     @endif

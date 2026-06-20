@@ -51,7 +51,12 @@
                             <div style="font-size:20px; font-weight:800; letter-spacing:2px;">
                                 {{ $match->home_score }} - {{ $match->away_score }}
                             </div>
-                            <div style="font-size:9px; color:#aaa; margin-top:2px;">FT</div>
+                            <div style="font-size:9px; color:#aaa; margin-top:2px;">
+                                FT
+                                @if($match->events->count() > 0)
+                                · {{ $match->events->count() }} events
+                                @endif
+                            </div>
                         </div>
                         <div style="flex:1;">
                             <div style="font-size:14px; font-weight:700; color:#111;">

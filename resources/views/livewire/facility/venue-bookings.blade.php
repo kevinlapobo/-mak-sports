@@ -65,8 +65,14 @@
                             </td>
                             <td style="padding:12px 14px; text-align:right; white-space:nowrap;">
                                 @if(in_array($booking->status, ['pending_approval', 'pending_signature']))
-                                <button wire:click="approve({{ $booking->id }})" style="background:var(--muk-green); color:#fff; border:none; padding:6px 14px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer; margin-right:4px;">Approve</button>
-                                <button wire:click="confirmReject({{ $booking->id }})" style="background:#fee2e2; color:var(--muk-red); border:none; padding:6px 14px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer;">Reject</button>
+<button wire:click="approve({{ $booking->id }})" wire:loading.attr="disabled" style="background:var(--muk-green); color:#fff; border:none; padding:6px 14px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer; margin-right:4px; display:inline-flex; align-items:center; gap:4px;">
+    <span wire:loading.remove wire:target="approve({{ $booking->id }})">Approve</span>
+    <span wire:loading wire:target="approve({{ $booking->id }})" style="display:flex; align-items:center; gap:4px;"><span style="width:12px;height:12px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite;display:inline-block;"></span></span>
+</button>
+<button wire:click="confirmReject({{ $booking->id }})" wire:loading.attr="disabled" style="background:#fee2e2; color:var(--muk-red); border:none; padding:6px 14px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+    <span wire:loading.remove wire:target="confirmReject({{ $booking->id }})">Reject</span>
+    <span wire:loading wire:target="confirmReject({{ $booking->id }})" style="display:flex; align-items:center; gap:4px;"><span style="width:12px;height:12px;border:2px solid var(--muk-red);border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite;display:inline-block;"></span></span>
+</button>
                                 @elseif($booking->status === 'approved')
                                 <span style="font-size:11px; color:var(--muk-green); font-weight:600;">✓ {{ $booking->approver?->name ?? 'Approved' }}</span>
                                 @else
@@ -107,7 +113,10 @@
 
         <div style="display:flex; gap:10px; margin-top:16px; justify-content:flex-end;">
             <button wire:click="cancelReject" style="padding:10px 20px; border:1.5px solid #e5e7eb; border-radius:8px; font-size:13px; font-weight:600; background:#fff; cursor:pointer;">Cancel</button>
-            <button wire:click="reject" style="padding:10px 20px; background:var(--muk-red); color:#fff; border:none; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer;">Reject Booking</button>
+            <button wire:click="reject" wire:loading.attr="disabled" style="padding:10px 20px; background:var(--muk-red); color:#fff; border:none; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px;">
+    <span wire:loading.remove wire:target="reject">Reject Booking</span>
+    <span wire:loading wire:target="reject" style="display:flex; align-items:center; gap:6px;"><span style="width:14px;height:14px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite;display:inline-block;"></span> Processing...</span>
+</button>
         </div>
     </div>
 </div>

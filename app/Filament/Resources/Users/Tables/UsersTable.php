@@ -29,6 +29,7 @@ class UsersTable
                 TextColumn::make('role')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
+                        'admin' => 'danger',
                         'facility_manager' => 'warning',
                         'coach' => 'success',
                         'player' => 'info',

@@ -62,4 +62,14 @@ class Matches extends Model
     {
         return $this->status === 'scheduled';
     }
+
+    public static function checkAndUpdateStatuses(): void
+    {
+        $now = now();
+
+        // Set scheduled fixtures that have reached their match time to live
+        self::where('status', 'scheduled')
+            ->where('match_date', '<=', $now)
+            ->update(['status' => 'live']);
+    }
 }

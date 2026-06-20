@@ -34,7 +34,7 @@ class Home extends Component
             ->where('status', 'live')
             ->get();
 
-        // Today's fixtures
+        // Today's fixtures (exclude finished)
         $todayFixtures = Matches::with(['homeTeam', 'awayTeam', 'competition', 'venue'])
             ->whereDate('match_date', today())
             ->where('status', 'scheduled')

@@ -1,7 +1,9 @@
-<div>
+<div wire:poll.30s>
 
-{{-- HERO SECTION — Stadium pitch --}}
-<div class="hero-static">
+{{-- HERO SECTION — Image slider --}}
+<div class="hero-static" id="heroSlider">
+    <div class="hero-slide active" style="background-image:url('https://images.unsplash.com/photo-1575361204480-aadea25e6e68?w=1600&q=80');"></div>
+    <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=1600&q=80');"></div>
     <div class="hero-inner">
         <div class="hero-left">
             <div class="hero-badge">
@@ -27,6 +29,19 @@
         <div class="hero-right">@include('livewire.pages._hero_card', ['featuredMatch' => $featuredMatch])</div>
     </div>
 </div>
+
+<script>
+(function(){
+    var slides = document.querySelectorAll('#heroSlider .hero-slide');
+    if (slides.length < 2) return;
+    var current = 0;
+    setInterval(function(){
+        slides[current].classList.remove('active');
+        current = (current + 1) % slides.length;
+        slides[current].classList.add('active');
+    }, 6000);
+})();
+</script>
 
 {{-- LIVE BANNER (auth only, just after hero) --}}
 @auth
@@ -256,18 +271,34 @@
     position: relative;
     width: 100%;
     min-height: 100vh;
-    background-image: url('https://images.unsplash.com/photo-1575361204480-aadea25e6e68?w=1600&q=80');
-    background-size: cover;
-    background-position: center;
     display: flex;
     align-items: center;
+    overflow: hidden;
+    background: linear-gradient(160deg, #1a1a2e 0%, var(--muk-green-dark) 40%, var(--muk-green) 70%, var(--muk-green-dark) 100%);
 }
-.hero-static::after {
+.hero-slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1.2s ease-in-out;
+    z-index: 0;
+}
+.hero-slide.active {
+    opacity: 1;
+}
+.hero-slide::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,.55);
     z-index: 1;
+}
+.hero-slide:first-child::after {
+    background: linear-gradient(135deg, rgba(0,0,0,.08) 0%, rgba(0,0,0,.03) 100%);
+}
+.hero-slide:last-child::after {
+    background: linear-gradient(135deg, rgba(0,0,0,.35) 0%, rgba(0,0,0,.15) 100%);
 }
 .hero-inner {
     position: relative;
@@ -541,6 +572,7 @@
 
 @media (max-width:900px) {
     .hero-static { min-height: 70vh; }
+    .hero-slide { background-position: 50% 20% !important; }
     .hero-inner { grid-template-columns: 1fr; padding: 100px 16px 40px; }
     .hero-right { display: none; }
     .hero-stats { grid-template-columns: repeat(2, 1fr) !important; gap: 12px; margin-top: 24px; max-width: 100%; }

@@ -83,7 +83,7 @@
 
                 <button type="submit" wire:loading.attr="disabled" style="width:100%; padding:14px; background:var(--muk-red); color:#fff; border:none; border-radius:10px; font-size:15px; font-weight:700; cursor:pointer; transition:background .15s; display:flex; align-items:center; justify-content:center; gap:8px;" onmouseover="this.style.background='#990000'" onmouseout="this.style.background='var(--muk-red)'">
                     <span wire:loading.remove wire:target="updateProfile">Update Profile</span>
-                    <span wire:loading wire:target="updateProfile" style="display:flex; align-items:center; gap:6px;"><span style="width:16px;height:16px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite;display:inline-block;"></span> Saving...</span>
+                    <span wire:loading wire:target="updateProfile" style="display:flex; align-items:center; gap:6px;"><span style="width:16px;height:16px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite;display:inline-block;"></span> Processing...</span>
                 </button>
                 <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
             </form>

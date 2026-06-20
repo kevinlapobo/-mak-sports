@@ -57,8 +57,14 @@
                             <td style="padding:12px 16px; color:#888; font-size:12px;">{{ $user->created_at->format('d M Y') }}</td>
                             <td style="padding:12px 16px; text-align:right; white-space:nowrap;">
                                 @if($user->status === 'pending')
-                                <button wire:click="approve({{ $user->id }})" style="background:var(--muk-green); color:#fff; border:none; padding:6px 14px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer; margin-right:4px;">Approve</button>
-                                <button wire:click="reject({{ $user->id }})" style="background:#fee2e2; color:var(--muk-red); border:none; padding:6px 14px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer;">Reject</button>
+<button wire:click="approve({{ $user->id }})" wire:loading.attr="disabled" style="background:var(--muk-green); color:#fff; border:none; padding:6px 14px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer; margin-right:4px; display:inline-flex; align-items:center; gap:4px;">
+    <span wire:loading.remove wire:target="approve({{ $user->id }})">Approve</span>
+    <span wire:loading wire:target="approve({{ $user->id }})" style="display:flex; align-items:center; gap:4px;"><span style="width:12px;height:12px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite;display:inline-block;"></span></span>
+</button>
+<button wire:click="reject({{ $user->id }})" wire:loading.attr="disabled" style="background:#fee2e2; color:var(--muk-red); border:none; padding:6px 14px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+    <span wire:loading.remove wire:target="reject({{ $user->id }})">Reject</span>
+    <span wire:loading wire:target="reject({{ $user->id }})" style="display:flex; align-items:center; gap:4px;"><span style="width:12px;height:12px;border:2px solid var(--muk-red);border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite;display:inline-block;"></span></span>
+</button>
                                 @elseif($user->status === 'approved')
                                 <span style="font-size:11px; color:var(--muk-green); font-weight:600;">✓ Approved</span>
                                 @else

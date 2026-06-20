@@ -1,4 +1,4 @@
-
+@php \App\Models\Matches::checkAndUpdateStatuses(); @endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,22 +39,22 @@
     right: 0;
     z-index: 1000;
     height: 64px;
-    transition: background .3s ease, box-shadow .3s ease, height .3s ease;
+    transition: background .3s ease, border-bottom .3s ease, box-shadow .3s ease, height .3s ease;
     background: var(--muk-green);
     border-bottom: 3px solid var(--muk-red);
     box-shadow: 0 2px 10px rgba(0,0,0,.2);
   }
   #main-nav.with-hero {
     background: transparent;
-    border-bottom-color: transparent;
+    border-bottom: 1px solid rgba(255,255,255,.4);
     box-shadow: none;
   }
   #main-nav.with-hero .nav-link {
     text-shadow: 0 1px 6px rgba(0,0,0,.6);
   }
   #main-nav.scrolled {
-    background: var(--muk-green);
-    border-bottom-color: var(--muk-red);
+    background: #3CB043;
+    border-bottom: 3px solid var(--muk-red);
     box-shadow: 0 4px 20px rgba(0,0,0,.3);
     height: 56px;
   }
@@ -99,7 +99,7 @@
     color: rgba(255,255,255,.85);
     font-size: 13px;
     font-weight: 600;
-    padding: 7px 13px;
+    padding: 6px 10px;
     border-radius: 8px;
     text-decoration: none;
     transition: background .15s, color .15s;
@@ -120,6 +120,35 @@
     0%,100% { background: var(--muk-red); }
     50% { background: #990000; }
   }
+  /* Dropdown */
+  .nav-dropdown { position: relative; }
+  .nav-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--muk-green-dark);
+    border-radius: 10px;
+    padding: 6px;
+    min-width: 170px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.3);
+    z-index: 1001;
+  }
+  .nav-dropdown:hover .nav-dropdown-menu,
+  .nav-dropdown-menu.open { display: flex; flex-direction: column; gap: 2px; }
+  .nav-dropdown-menu a {
+    color: rgba(255,255,255,.85);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background .15s;
+    white-space: nowrap;
+  }
+  .nav-dropdown-menu a:hover { background: rgba(255,255,255,.12); color: #fff; }
+  .nav-dropdown-menu a.active { background: rgba(255,255,255,.15); color: var(--muk-gold); }
+  .nav-dropdown-arrow { font-size: 8px; margin-left: 4px; }
   /* Mobile menu */
   .mobile-menu-btn {
     display: none;
@@ -678,6 +707,7 @@
   @media(max-width:560px) {
     .grid-4,.grid-3,.grid-2 { grid-template-columns: 1fr; }
   }
+  @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
@@ -702,10 +732,8 @@
 
         {{-- Desktop nav --}}
         <div class="nav-links">
-            <a href="{{ route('home') }}"
-               class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}">
-               Home
-            </a>
+            @php $showPublicNav = !auth()->check() || !in_array(auth()->user()->role, ['admin', 'facility_manager']); @endphp
+            @if($showPublicNav)
             <a href="{{ route('fixtures') }}"
                class="nav-link {{ request()->routeIs('fixtures') ? 'active' : '' }}">
                Fixtures
@@ -717,6 +745,11 @@
             <a href="{{ route('teams') }}"
                class="nav-link {{ request()->routeIs('teams') ? 'active' : '' }}">
                Teams
+            </a>
+            @endif
+            <a href="{{ route('contact') }}"
+               class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}">
+               Contact
             </a>
             @auth
                 <a href="{{ route('live') }}"
@@ -752,7 +785,7 @@
                        Profile
                     </a>
                 @endif
-                @if(auth()->user()->role === 'facility_manager')
+                @if(in_array(auth()->user()->role, ['admin', 'facility_manager']))
                     <a href="{{ route('facility.approvals') }}"
                        class="nav-link {{ request()->routeIs('facility.approvals') ? 'active' : '' }}">
                        👥 Approvals
@@ -766,9 +799,39 @@
 
             {{-- Auth Links --}}
             @auth
+                @php $u = auth()->user(); @endphp
+                @if(in_array($u->role, ['admin', 'facility_manager']))
+                    <div class="nav-dropdown">
+                        <span class="nav-link" style="cursor:pointer;">📋 Fixtures<span class="nav-dropdown-arrow">▼</span></span>
+                        <div class="nav-dropdown-menu">
+                            <a href="{{ route('admin.manage-fixtures') }}" class="{{ request()->routeIs('admin.manage-fixtures') ? 'active' : '' }}">➕ Create Fixture</a>
+                            <a href="{{ route('fixtures') }}" class="{{ request()->routeIs('fixtures') ? 'active' : '' }}">📅 All Fixtures</a>
+                        </div>
+                    </div>
+                    <div class="nav-dropdown">
+                        <span class="nav-link" style="cursor:pointer;">⚽ Results<span class="nav-dropdown-arrow">▼</span></span>
+                        <div class="nav-dropdown-menu">
+                            @if($u->role === 'admin')
+                            <a href="{{ route('admin.add-results') }}" class="{{ request()->routeIs('admin.add-results') ? 'active' : '' }}">📝 Add Results</a>
+                            <a href="{{ route('admin.pending-results') }}" class="{{ request()->routeIs('admin.pending-results') ? 'active' : '' }}">⏳ Pending</a>
+                            @endif
+                            <a href="{{ route('results') }}" class="{{ request()->routeIs('results') ? 'active' : '' }}">📊 All Results</a>
+                        </div>
+                    </div>
+                    <div class="nav-dropdown">
+                        <span class="nav-link" style="cursor:pointer;">🏆 Teams<span class="nav-dropdown-arrow">▼</span></span>
+                        <div class="nav-dropdown-menu">
+                            <a href="{{ route('teams') }}" class="{{ request()->routeIs('teams') ? 'active' : '' }}">👥 All Teams</a>
+                            @if($u->role === 'admin')
+                            <a href="{{ route('admin.new-teams') }}" class="{{ request()->routeIs('admin.new-teams') ? 'active' : '' }}">🆕 New Teams</a>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+                <livewire:notifications.notification-bell :key="'bell-'.$u->id" wire:key="'bell-'.$u->id"/>
                 <a href="{{ route('dashboard') }}"
                    class="nav-link" style="display:flex; align-items:center; gap:6px; background:rgba(255,215,0,.2); color:var(--muk-gold);">
-                   <span style="width:26px; height:26px; border-radius:50%; background:var(--muk-gold); color:var(--muk-black); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; flex-shrink:0;">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
+                   <span style="width:26px; height:26px; border-radius:50%; background:var(--muk-gold); color:var(--muk-black); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; flex-shrink:0;">{{ strtoupper(substr($u->name, 0, 1)) }}</span>
                    Dashboard
                 </a>
                 <form method="POST" action="{{ route('logout') }}" class="inline">
@@ -796,10 +859,13 @@
 
     {{-- Mobile nav --}}
     <div class="mobile-nav" id="mobile-menu">
-        <a href="{{ route('home') }}" class="nav-link">Home</a>
+        @php $mRole = auth()->check() ? auth()->user()->role : ''; $showMobilePublic = !in_array($mRole, ['admin', 'facility_manager']); @endphp
+        @if($showMobilePublic)
         <a href="{{ route('fixtures') }}" class="nav-link">Fixtures</a>
         <a href="{{ route('results') }}" class="nav-link">Results</a>
         <a href="{{ route('teams') }}" class="nav-link">Teams</a>
+        @endif
+        <a href="{{ route('contact') }}" class="nav-link">Contact</a>
 
         @auth
             <a href="{{ route('live') }}" class="nav-link live-link">● LIVE</a>
@@ -813,10 +879,28 @@
             @if(auth()->user()->role === 'player')
                 <a href="{{ route('player.profile') }}" class="nav-link">Profile</a>
             @endif
-            @if(auth()->user()->role === 'facility_manager')
+            @if(in_array(auth()->user()->role, ['admin', 'facility_manager']))
                 <a href="{{ route('facility.approvals') }}" class="nav-link">👥 Approvals</a>
                 <a href="{{ route('facility.venue-bookings') }}" class="nav-link">🏟 Bookings</a>
             @endif
+            @if(in_array(auth()->user()->role, ['admin', 'facility_manager']))
+                @php $mUser = auth()->user(); @endphp
+                <div style="padding: 4px 16px; font-size: 11px; color: rgba(255,255,255,.35); text-transform: uppercase; letter-spacing:1px; margin-top:4px;">Fixtures</div>
+                <a href="{{ route('admin.manage-fixtures') }}" class="nav-link">➕ Create Fixture</a>
+                <a href="{{ route('fixtures') }}" class="nav-link">📅 All Fixtures</a>
+                <div style="padding: 4px 16px; font-size: 11px; color: rgba(255,255,255,.35); text-transform: uppercase; letter-spacing:1px; margin-top:4px;">Results</div>
+                @if($mUser->role === 'admin')
+                <a href="{{ route('admin.add-results') }}" class="nav-link">📝 Add Results</a>
+                <a href="{{ route('admin.pending-results') }}" class="nav-link">⏳ Pending</a>
+                @endif
+                <a href="{{ route('results') }}" class="nav-link">📊 All Results</a>
+                <div style="padding: 4px 16px; font-size: 11px; color: rgba(255,255,255,.35); text-transform: uppercase; letter-spacing:1px; margin-top:4px;">Teams</div>
+                <a href="{{ route('teams') }}" class="nav-link">👥 All Teams</a>
+                @if($mUser->role === 'admin')
+                <a href="{{ route('admin.new-teams') }}" class="nav-link">🆕 New Teams</a>
+                @endif
+            @endif
+            <a href="{{ route('notifications') }}" class="nav-link" style="display:flex; align-items:center; gap:6px;">🔔 Notifications</a>
             <a href="{{ route('dashboard') }}" class="nav-link" style="color:var(--muk-gold);">Dashboard</a>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
@@ -897,6 +981,7 @@ window.addEventListener('load', adjustPadding);
                     <li><a href="{{ route('results') }}">Results</a></li>
                     <li><a href="{{ route('standings') }}">Standings</a></li>
                     <li><a href="{{ route('teams') }}">Teams</a></li>
+                    <li><a href="{{ route('contact') }}">Contact Us</a></li>
                 </ul>
             </div>
 
@@ -930,20 +1015,15 @@ window.addEventListener('load', adjustPadding);
 <script>
 /* ── Navbar scroll effect ── */
 const nav = document.getElementById('main-nav');
-const isHeroPage = nav.classList.contains('with-hero');
 
 function handleScroll() {
-    if (isHeroPage) {
-        if (window.scrollY > 60) {
-            nav.classList.add('scrolled');
-        } else {
-            nav.classList.remove('scrolled');
-        }
+    if (window.scrollY > 60) {
+        nav.classList.add('scrolled');
+    } else {
+        nav.classList.remove('scrolled');
     }
 }
-if (isHeroPage) {
-    window.addEventListener('scroll', handleScroll, { passive: true });
-}
+window.addEventListener('scroll', handleScroll, { passive: true });
 handleScroll();
 
 /* ── Mobile menu toggle ── */
@@ -994,5 +1074,33 @@ document.querySelectorAll('.reveal').forEach(el => {
     observer.observe(el);
 });
 </script>
+
+{{-- Notification popup for users with unread notifications --}}
+@auth
+@php $unreadNotifs = auth()->user()->unreadNotifications; @endphp
+@if($unreadNotifs->count() > 0)
+<div x-data="{ show: true }"
+     x-show="show"
+     x-init="setTimeout(() => show = false, 8000)"
+     x-transition:enter.duration.400ms
+     x-transition:leave.duration.300ms
+     style="position:fixed; bottom:24px; right:24px; z-index:10000; background:#fff; border-radius:16px; box-shadow:0 10px 40px rgba(0,0,0,.2); max-width:360px; width:100%; overflow:hidden; border:1px solid #e5e7eb;">
+    <div style="background:var(--muk-green-dark); padding:12px 16px; display:flex; align-items:center; justify-content:space-between;">
+        <span style="color:#fff; font-weight:800; font-size:14px;">🔔 {{ $unreadNotifs->count() }} New Notification(s)</span>
+        <button @click="show = false" style="background:rgba(255,255,255,.2); border:none; color:#fff; border-radius:50%; width:24px; height:24px; font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center;">✕</button>
+    </div>
+    <div style="padding:8px 16px; max-height:200px; overflow-y:auto;">
+        @foreach($unreadNotifs->sortByDesc('created_at')->take(4) as $notification)
+        <div style="padding:10px 0; border-bottom:1px solid #f3f4f6; font-size:13px;">
+            <div style="font-weight:700; color:var(--muk-green-dark);">{{ $notification->data['title'] ?? 'Notification' }}</div>
+            <div style="font-size:12px; color:#6b7280; margin-top:2px;">{{ Str::limit($notification->data['message'] ?? '', 80) }}</div>
+        </div>
+        @endforeach
+    </div>
+    <a href="{{ route('notifications') }}" style="display:block; text-align:center; padding:10px; background:#f9fafb; color:var(--muk-green); font-weight:700; font-size:13px; text-decoration:none; border-top:1px solid #e5e7eb;">View All Notifications →</a>
+</div>
+@endif
+@endauth
+
 </body>
 </html>

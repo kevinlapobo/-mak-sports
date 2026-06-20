@@ -82,7 +82,7 @@
                     <div style="display:flex; gap:10px;">
                         <button type="submit" wire:loading.attr="disabled" style="background:var(--muk-green); color:#fff; border:none; padding:10px 24px; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:8px;">
                             <span wire:loading.remove wire:target="createTeam">Register Team</span>
-                            <span wire:loading wire:target="createTeam" style="display:flex; align-items:center; gap:6px;"><span style="width:14px;height:14px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite;display:inline-block;"></span> Saving...</span>
+                            <span wire:loading wire:target="createTeam" style="display:flex; align-items:center; gap:6px;"><span style="width:14px;height:14px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite;display:inline-block;"></span> Processing...</span>
                         </button>
                         <button type="button" wire:click="$set('showForm', false)" wire:loading.attr="disabled" style="background:#fff; color:#666; border:1px solid #e5e7eb; padding:10px 24px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer;">Cancel</button>
                     </div>

@@ -29,12 +29,10 @@
     @if($competitions->count() > 0)
         <div style="background:#fff; border-radius:12px; padding:12px; margin-bottom:20px; border:1px solid #e5e7eb; display:flex; gap:8px; flex-wrap:wrap;">
             @foreach($competitions as $comp)
-                <button wire:click="selectCompetition({{ $comp->id }})"
-                        style="background:{{ $competitionId === $comp->id ? 'var(--muk-green)' : '#f9fafb' }}; color:{{ $competitionId === $comp->id ? '#fff' : '#111' }}; border:none; border-radius:8px; padding:8px 14px; font-size:12px; font-weight:700; cursor:pointer;">
-                    {{ $comp->name }}
-                    @if($comp->sport)
-                        <span style="opacity:0.7;">({{ $comp->sport->name }})</span>
-                    @endif
+                <button wire:click="selectCompetition({{ $comp->id }})" wire:loading.attr="disabled"
+                        style="background:{{ $competitionId === $comp->id ? 'var(--muk-green)' : '#f9fafb' }}; color:{{ $competitionId === $comp->id ? '#fff' : '#111' }}; border:none; border-radius:8px; padding:8px 14px; font-size:12px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+                    <span wire:loading.remove wire:target="selectCompetition({{ $comp->id }})">{{ $comp->name }} @if($comp->sport)<span style="opacity:0.7;">({{ $comp->sport->name }})</span>@endif</span>
+                    <span wire:loading wire:target="selectCompetition({{ $comp->id }})" style="display:flex; align-items:center; gap:4px;"><span style="width:12px;height:12px;border:2px solid {{ $competitionId === $comp->id ? '#fff' : '#111' }};border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite;display:inline-block;"></span></span>
                 </button>
             @endforeach
         </div>
