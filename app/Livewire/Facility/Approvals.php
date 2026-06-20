@@ -14,6 +14,13 @@ class Approvals extends Component
     public string $roleFilter = '';
     public string $statusFilter = 'pending';
 
+    public function mount(): void
+    {
+        if (auth()->user()->role !== 'admin') {
+            abort(403);
+        }
+    }
+
     public function approve($userId)
     {
         $user = User::findOrFail($userId);

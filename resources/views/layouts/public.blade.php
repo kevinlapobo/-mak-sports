@@ -785,11 +785,13 @@
                        Profile
                     </a>
                 @endif
-                @if(in_array(auth()->user()->role, ['admin', 'facility_manager']))
+                @if(auth()->user()->role === 'admin')
                     <a href="{{ route('facility.approvals') }}"
                        class="nav-link {{ request()->routeIs('facility.approvals') ? 'active' : '' }}">
                        👥 Approvals
                     </a>
+                @endif
+                @if(in_array(auth()->user()->role, ['admin', 'facility_manager']))
                     <a href="{{ route('facility.venue-bookings') }}"
                        class="nav-link {{ request()->routeIs('facility.venue-bookings') ? 'active' : '' }}">
                        🏟 Bookings
@@ -879,8 +881,10 @@
             @if(auth()->user()->role === 'player')
                 <a href="{{ route('player.profile') }}" class="nav-link">Profile</a>
             @endif
-            @if(in_array(auth()->user()->role, ['admin', 'facility_manager']))
+            @if(auth()->user()->role === 'admin')
                 <a href="{{ route('facility.approvals') }}" class="nav-link">👥 Approvals</a>
+            @endif
+            @if(in_array(auth()->user()->role, ['admin', 'facility_manager']))
                 <a href="{{ route('facility.venue-bookings') }}" class="nav-link">🏟 Bookings</a>
             @endif
             @if(in_array(auth()->user()->role, ['admin', 'facility_manager']))
