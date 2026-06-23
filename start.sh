@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-# Generate APP_KEY only if not already set
-if ! php artisan key:generate --show --quiet 2>/dev/null | grep -q .; then
+# Generate APP_KEY if not already set by Railway
+if [ -z "$APP_KEY" ]; then
     php artisan key:generate --force --quiet 2>/dev/null || true
 fi
 

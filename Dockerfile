@@ -25,6 +25,9 @@ COPY . .
 # Install Composer dependencies
 RUN composer install --optimize-autoloader --no-dev --no-interaction
 
+# Laravel requires a .env file to exist (Railway injects real values at runtime)
+RUN touch /app/.env && php artisan key:generate --force
+
 # Fix storage permissions
 RUN chmod -R 777 storage bootstrap/cache
 
