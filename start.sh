@@ -6,6 +6,11 @@ if [ -z "$APP_KEY" ]; then
     php artisan key:generate --force --quiet 2>/dev/null || true
 fi
 
+# Override .env for Railway production
+echo "APP_DEBUG=true" >> /app/.env
+echo "SESSION_DRIVER=file" >> /app/.env
+echo "CACHE_STORE=file" >> /app/.env
+
 # Clear all caches (avoids stale view/config/route issues)
 php artisan route:clear --quiet 2>/dev/null || true
 php artisan config:clear --quiet 2>/dev/null || true
