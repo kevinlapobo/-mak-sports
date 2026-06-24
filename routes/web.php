@@ -80,3 +80,9 @@ Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallbac
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/venue-bookings/{id}/print', [BookingPrintController::class, 'print'])->name('admin.venue-bookings.print');
 });
+
+Route::get('/debug-auth', function () {
+    $user = auth()->user();
+    if (!$user) return 'Not authenticated';
+    return "User: {$user->name}<br>Email: {$user->email}<br>Role: {$user->role}<br>ID: {$user->id}";
+})->middleware('auth');
