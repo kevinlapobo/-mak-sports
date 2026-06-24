@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
@@ -26,5 +27,11 @@ class AppServiceProvider extends ServiceProvider
             Request::HEADER_X_FORWARDED_PORT |
             Request::HEADER_X_FORWARDED_PROTO
         );
+
+        Gate::before(function ($user) {
+            if (in_array($user->role, ['admin', 'facility_manager'])) {
+                return true;
+            }
+        });
     }
 }
