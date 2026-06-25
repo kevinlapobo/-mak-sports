@@ -19,6 +19,9 @@ php artisan view:clear --quiet 2>/dev/null || true
 # Run migrations
 php artisan migrate --force
 
+# Create storage symlink so profile photos are accessible
+php artisan storage:link --force --quiet 2>/dev/null || true
+
 # Sync Shield roles & assign super_admin to all admin users
 php artisan shield:sync-admin --no-interaction 2>/dev/null || true
 
