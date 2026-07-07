@@ -53,7 +53,6 @@ class AuthController extends Controller
             }],
             'password' => ['required', 'confirmed', Password::defaults()],
             'phone' => ['nullable', 'string', 'max:20'],
-            'student_number' => ['nullable', 'string', 'max:50'],
         ]);
 
         $user = User::create([
@@ -63,7 +62,6 @@ class AuthController extends Controller
             'role' => 'student',
             'full_name' => $validated['name'],
             'phone' => $validated['phone'] ?? null,
-            'student_number' => $validated['student_number'] ?? null,
             'status' => 'approved',
         ]);
 

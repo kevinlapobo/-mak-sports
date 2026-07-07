@@ -33,14 +33,6 @@
         </div>
 
         <div>
-            <label for="student_number" class="block text-sm font-semibold text-gray-700">Student Number (optional)</label>
-            <input id="student_number" name="student_number" type="text"
-                class="mt-1 appearance-none block w-full px-3 py-2.5 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#28A745] focus:border-transparent"
-                value="{{ old('student_number') }}"
-                placeholder="e.g. S22B13/001">
-        </div>
-
-        <div>
             <label for="password" class="block text-sm font-semibold text-gray-700">Password</label>
             <div class="relative mt-1">
                 <input id="password" name="password" type="password" autocomplete="new-password" required
