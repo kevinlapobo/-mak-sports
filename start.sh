@@ -16,6 +16,12 @@ php artisan route:clear --quiet 2>/dev/null || true
 php artisan config:clear --quiet 2>/dev/null || true
 php artisan view:clear --quiet 2>/dev/null || true
 
+# Re-publish Filament assets and refresh navigation
+php artisan filament:upgrade --quiet --no-interaction 2>/dev/null || true
+
+# Cache routes, config, and events for performance
+php artisan optimize --quiet 2>/dev/null || true
+
 # Run migrations
 php artisan migrate --force
 
