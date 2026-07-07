@@ -760,87 +760,84 @@
                    class="nav-link {{ request()->routeIs('standings') ? 'active' : '' }}">
                    Standings
                 </a>
-                <a href="{{ route('venues.index') }}"
-                   class="nav-link {{ request()->routeIs('venue.*') ? 'active' : '' }}"
-                   style="background:rgba(204,0,0,.8); color:#fff;">
-                   🏟 Book Venue
-                </a>
-                @if(auth()->user()->role === 'coach')
-                    <a href="{{ route('coach.my-teams') }}"
-                       class="nav-link {{ request()->routeIs('coach.my-teams') ? 'active' : '' }}">
-                       My Teams
-                    </a>
-                    <a href="{{ route('coach.profile') }}"
-                       class="nav-link {{ request()->routeIs('coach.profile') ? 'active' : '' }}">
-                       Profile
-                    </a>
-                    <a href="{{ route('coach.stats') }}"
-                       class="nav-link {{ request()->routeIs('coach.stats') ? 'active' : '' }}">
-                       My Stats
-                    </a>
-                @endif
-                @if(auth()->user()->role === 'player')
-                    <a href="{{ route('player.profile') }}"
-                       class="nav-link {{ request()->routeIs('player.profile') ? 'active' : '' }}">
-                       Profile
-                    </a>
-                @endif
-                @if(auth()->user()->role === 'admin')
-                    <a href="{{ route('facility.approvals') }}"
-                       class="nav-link {{ request()->routeIs('facility.approvals') ? 'active' : '' }}">
-                       👥 Approvals
-                    </a>
-                @endif
-                @if(in_array(auth()->user()->role, ['admin', 'facility_manager']))
-                    <a href="{{ route('facility.venue-bookings') }}"
-                       class="nav-link {{ request()->routeIs('facility.venue-bookings') ? 'active' : '' }}">
-                       🏟 Bookings
-                    </a>
-                @endif
-            @endauth
+                 @if(auth()->user()->role === 'coach')
+                     <a href="{{ route('coach.my-teams') }}"
+                        class="nav-link {{ request()->routeIs('coach.my-teams') ? 'active' : '' }}">
+                        My Teams
+                     </a>
+                     <a href="{{ route('coach.profile') }}"
+                        class="nav-link {{ request()->routeIs('coach.profile') ? 'active' : '' }}">
+                        Profile
+                     </a>
+                     <a href="{{ route('coach.stats') }}"
+                        class="nav-link {{ request()->routeIs('coach.stats') ? 'active' : '' }}">
+                        My Stats
+                     </a>
+                 @endif
+                 @if(auth()->user()->role === 'player')
+                     <a href="{{ route('player.profile') }}"
+                        class="nav-link {{ request()->routeIs('player.profile') ? 'active' : '' }}">
+                        Profile
+                     </a>
+                 @endif
+                 @if(auth()->user()->role === 'admin')
+                     <a href="{{ route('facility.approvals') }}"
+                        class="nav-link {{ request()->routeIs('facility.approvals') ? 'active' : '' }}">
+                        👥 Approvals
+                     </a>
+                 @endif
+             @endauth
 
-            {{-- Auth Links --}}
-            @auth
-                @php $u = auth()->user(); @endphp
-                @if(in_array($u->role, ['admin', 'facility_manager']))
-                    <div class="nav-dropdown">
-                        <span class="nav-link" style="cursor:pointer;">📋 Fixtures<span class="nav-dropdown-arrow">▼</span></span>
-                        <div class="nav-dropdown-menu">
-                            <a href="{{ route('admin.manage-fixtures') }}" class="{{ request()->routeIs('admin.manage-fixtures') ? 'active' : '' }}">➕ Create Fixture</a>
-                            <a href="{{ route('fixtures') }}" class="{{ request()->routeIs('fixtures') ? 'active' : '' }}">📅 All Fixtures</a>
-                        </div>
-                    </div>
-                    <div class="nav-dropdown">
-                        <span class="nav-link" style="cursor:pointer;">⚽ Results<span class="nav-dropdown-arrow">▼</span></span>
-                        <div class="nav-dropdown-menu">
-                            @if($u->role === 'admin')
-                            <a href="{{ route('admin.add-results') }}" class="{{ request()->routeIs('admin.add-results') ? 'active' : '' }}">📝 Add Results</a>
-                            <a href="{{ route('admin.pending-results') }}" class="{{ request()->routeIs('admin.pending-results') ? 'active' : '' }}">⏳ Pending</a>
-                            @endif
-                            <a href="{{ route('results') }}" class="{{ request()->routeIs('results') ? 'active' : '' }}">📊 All Results</a>
-                        </div>
-                    </div>
-                    <div class="nav-dropdown">
-                        <span class="nav-link" style="cursor:pointer;">🏆 Teams<span class="nav-dropdown-arrow">▼</span></span>
-                        <div class="nav-dropdown-menu">
-                            <a href="{{ route('teams') }}" class="{{ request()->routeIs('teams') ? 'active' : '' }}">👥 All Teams</a>
-                            @if($u->role === 'admin')
-                            <a href="{{ route('admin.new-teams') }}" class="{{ request()->routeIs('admin.new-teams') ? 'active' : '' }}">🆕 New Teams</a>
-                            @endif
-                        </div>
-                    </div>
-                @endif
-                <livewire:notifications.notification-bell :key="'bell-'.$u->id" wire:key="'bell-'.$u->id"/>
-                <a href="{{ route('feedback.create') }}"
-                   class="nav-link">
-                   ✏️ Add Feedback
-                </a>
-                @if($u->role === 'admin')
-                <a href="{{ route('feedback.manage') }}"
-                   class="nav-link {{ request()->routeIs('feedback.manage') ? 'active' : '' }}">
-                   💬 All Feedback
-                </a>
-                @endif
+             {{-- Auth Links --}}
+             @auth
+                 @php $u = auth()->user(); @endphp
+                 <div class="nav-dropdown">
+                     <span class="nav-link" style="cursor:pointer;">🏟 Bookings<span class="nav-dropdown-arrow">▼</span></span>
+                     <div class="nav-dropdown-menu">
+                         <a href="{{ route('venues.index') }}" class="{{ request()->routeIs('venue.*') ? 'active' : '' }}">🏟 Book Venue</a>
+                         @if(in_array($u->role, ['admin', 'facility_manager']))
+                         <a href="{{ route('facility.venue-bookings') }}" class="{{ request()->routeIs('facility.venue-bookings') ? 'active' : '' }}">📋 Manage Bookings</a>
+                         @endif
+                     </div>
+                 </div>
+                 @if(in_array($u->role, ['admin', 'facility_manager']))
+                     <div class="nav-dropdown">
+                         <span class="nav-link" style="cursor:pointer;">📋 Fixtures<span class="nav-dropdown-arrow">▼</span></span>
+                         <div class="nav-dropdown-menu">
+                             <a href="{{ route('admin.manage-fixtures') }}" class="{{ request()->routeIs('admin.manage-fixtures') ? 'active' : '' }}">➕ Create Fixture</a>
+                             <a href="{{ route('fixtures') }}" class="{{ request()->routeIs('fixtures') ? 'active' : '' }}">📅 All Fixtures</a>
+                         </div>
+                     </div>
+                     <div class="nav-dropdown">
+                         <span class="nav-link" style="cursor:pointer;">⚽ Results<span class="nav-dropdown-arrow">▼</span></span>
+                         <div class="nav-dropdown-menu">
+                             @if($u->role === 'admin')
+                             <a href="{{ route('admin.add-results') }}" class="{{ request()->routeIs('admin.add-results') ? 'active' : '' }}">📝 Add Results</a>
+                             <a href="{{ route('admin.pending-results') }}" class="{{ request()->routeIs('admin.pending-results') ? 'active' : '' }}">⏳ Pending</a>
+                             @endif
+                             <a href="{{ route('results') }}" class="{{ request()->routeIs('results') ? 'active' : '' }}">📊 All Results</a>
+                         </div>
+                     </div>
+                     <div class="nav-dropdown">
+                         <span class="nav-link" style="cursor:pointer;">🏆 Teams<span class="nav-dropdown-arrow">▼</span></span>
+                         <div class="nav-dropdown-menu">
+                             <a href="{{ route('teams') }}" class="{{ request()->routeIs('teams') ? 'active' : '' }}">👥 All Teams</a>
+                             @if($u->role === 'admin')
+                             <a href="{{ route('admin.new-teams') }}" class="{{ request()->routeIs('admin.new-teams') ? 'active' : '' }}">🆕 New Teams</a>
+                             @endif
+                         </div>
+                     </div>
+                 @endif
+                 <livewire:notifications.notification-bell :key="'bell-'.$u->id" wire:key="'bell-'.$u->id"/>
+                 <div class="nav-dropdown">
+                     <span class="nav-link" style="cursor:pointer;">💬 Feedback<span class="nav-dropdown-arrow">▼</span></span>
+                     <div class="nav-dropdown-menu">
+                         <a href="{{ route('feedback.create') }}" class="{{ request()->routeIs('feedback.create') ? 'active' : '' }}">✏️ Add Feedback</a>
+                         @if($u->role === 'admin')
+                         <a href="{{ route('feedback.manage') }}" class="{{ request()->routeIs('feedback.manage') ? 'active' : '' }}">📋 All Feedback</a>
+                         @endif
+                     </div>
+                 </div>
                 <a href="{{ route('dashboard') }}"
                    class="nav-link" style="display:flex; align-items:center; gap:6px; background:rgba(255,215,0,.2); color:var(--muk-gold);">
                    <span style="width:26px; height:26px; border-radius:50%; background:var(--muk-gold); color:var(--muk-black); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; flex-shrink:0;">{{ strtoupper(substr($u->name, 0, 1)) }}</span>
@@ -882,7 +879,6 @@
         @auth
             <a href="{{ route('live') }}" class="nav-link live-link">● LIVE</a>
             <a href="{{ route('standings') }}" class="nav-link">Standings</a>
-            <a href="{{ route('venues.index') }}" class="nav-link" style="background:var(--muk-red); color:#fff;">🏟 Book Venue</a>
             @if(auth()->user()->role === 'coach')
                 <a href="{{ route('coach.my-teams') }}" class="nav-link">My Teams</a>
                 <a href="{{ route('coach.profile') }}" class="nav-link">Profile</a>
@@ -894,8 +890,10 @@
             @if(auth()->user()->role === 'admin')
                 <a href="{{ route('facility.approvals') }}" class="nav-link">👥 Approvals</a>
             @endif
+            <div style="padding: 4px 16px; font-size: 11px; color: rgba(255,255,255,.35); text-transform: uppercase; letter-spacing:1px; margin-top:4px;">🏟 Bookings</div>
+            <a href="{{ route('venues.index') }}" class="nav-link">🏟 Book Venue</a>
             @if(in_array(auth()->user()->role, ['admin', 'facility_manager']))
-                <a href="{{ route('facility.venue-bookings') }}" class="nav-link">🏟 Bookings</a>
+            <a href="{{ route('facility.venue-bookings') }}" class="nav-link">📋 Manage Bookings</a>
             @endif
             @if(in_array(auth()->user()->role, ['admin', 'facility_manager']))
                 @php $mUser = auth()->user(); @endphp
@@ -915,9 +913,10 @@
                 @endif
             @endif
             <a href="{{ route('notifications') }}" class="nav-link" style="display:flex; align-items:center; gap:6px;">🔔 Notifications</a>
+            <div style="padding: 4px 16px; font-size: 11px; color: rgba(255,255,255,.35); text-transform: uppercase; letter-spacing:1px; margin-top:4px;">💬 Feedback</div>
             <a href="{{ route('feedback.create') }}" class="nav-link">✏️ Add Feedback</a>
             @if(auth()->user()->role === 'admin')
-            <a href="{{ route('feedback.manage') }}" class="nav-link">💬 All Feedback</a>
+            <a href="{{ route('feedback.manage') }}" class="nav-link">📋 All Feedback</a>
             @endif
             <a href="{{ route('dashboard') }}" class="nav-link" style="color:var(--muk-gold);">Dashboard</a>
             <form method="POST" action="{{ route('logout') }}">
