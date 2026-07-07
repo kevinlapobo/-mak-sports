@@ -797,12 +797,6 @@
                        🏟 Bookings
                     </a>
                 @endif
-                @if(auth()->user()->role === 'admin')
-                    <a href="{{ route('feedback.manage') }}"
-                       class="nav-link {{ request()->routeIs('feedback.manage') ? 'active' : '' }}">
-                       💬 Feedback
-                    </a>
-                @endif
             @endauth
 
             {{-- Auth Links --}}
@@ -839,8 +833,14 @@
                 <livewire:notifications.notification-bell :key="'bell-'.$u->id" wire:key="'bell-'.$u->id"/>
                 <a href="{{ route('feedback.create') }}"
                    class="nav-link">
-                   💬 Feedback
+                   ✏️ Add Feedback
                 </a>
+                @if($u->role === 'admin')
+                <a href="{{ route('feedback.manage') }}"
+                   class="nav-link {{ request()->routeIs('feedback.manage') ? 'active' : '' }}">
+                   💬 All Feedback
+                </a>
+                @endif
                 <a href="{{ route('dashboard') }}"
                    class="nav-link" style="display:flex; align-items:center; gap:6px; background:rgba(255,215,0,.2); color:var(--muk-gold);">
                    <span style="width:26px; height:26px; border-radius:50%; background:var(--muk-gold); color:var(--muk-black); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; flex-shrink:0;">{{ strtoupper(substr($u->name, 0, 1)) }}</span>
@@ -897,9 +897,6 @@
             @if(in_array(auth()->user()->role, ['admin', 'facility_manager']))
                 <a href="{{ route('facility.venue-bookings') }}" class="nav-link">🏟 Bookings</a>
             @endif
-            @if(auth()->user()->role === 'admin')
-                <a href="{{ route('feedback.manage') }}" class="nav-link">💬 Feedback</a>
-            @endif
             @if(in_array(auth()->user()->role, ['admin', 'facility_manager']))
                 @php $mUser = auth()->user(); @endphp
                 <div style="padding: 4px 16px; font-size: 11px; color: rgba(255,255,255,.35); text-transform: uppercase; letter-spacing:1px; margin-top:4px;">Fixtures</div>
@@ -918,7 +915,10 @@
                 @endif
             @endif
             <a href="{{ route('notifications') }}" class="nav-link" style="display:flex; align-items:center; gap:6px;">🔔 Notifications</a>
-            <a href="{{ route('feedback.create') }}" class="nav-link">💬 Feedback</a>
+            <a href="{{ route('feedback.create') }}" class="nav-link">✏️ Add Feedback</a>
+            @if(auth()->user()->role === 'admin')
+            <a href="{{ route('feedback.manage') }}" class="nav-link">💬 All Feedback</a>
+            @endif
             <a href="{{ route('dashboard') }}" class="nav-link" style="color:var(--muk-gold);">Dashboard</a>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
