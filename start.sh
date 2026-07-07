@@ -31,7 +31,10 @@ php artisan storage:link --force --quiet 2>/dev/null || true
 # Sync Shield roles & assign super_admin to all admin users
 php artisan shield:sync-admin --no-interaction 2>/dev/null || true
 
-echo "Starting Nginx + PHP-FPM on port 8080..."
+echo "Starting Laravel scheduler, PHP-FPM, and Nginx..."
+
+# Start Laravel scheduler (daemon — runs schedule:run every minute)
+php artisan schedule:work --quiet --no-interaction 2>/dev/null &
 
 # Start PHP-FPM in background
 php-fpm -D

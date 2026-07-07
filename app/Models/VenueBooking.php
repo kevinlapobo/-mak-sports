@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,6 +11,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class VenueBooking extends Model
 {
     use HasFactory;
+
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_PENDING_APPROVAL = 'pending_approval';
+    public const STATUS_PENDING_SIGNATURE = 'pending_signature';
+    public const STATUS_APPROVED = 'approved';
+    public const STATUS_REJECTED = 'rejected';
+    public const STATUS_COMPLETED = 'completed';
 
     protected $fillable = [
         'user_id',
@@ -30,8 +39,10 @@ class VenueBooking extends Model
     ];
 
     protected $casts = [
-        'booking_date' => 'date',
+        'booking_date' => 'date:Y-m-d',
         'approved_at'  => 'datetime',
+        'start_time'   => 'string',
+        'end_time'     => 'string',
     ];
 
     // Auto-generate reference on create
@@ -71,10 +82,9 @@ class VenueBooking extends Model
     ): bool {
         return static::where('venue_id', $venueId)
             ->where('booking_date', $date)
-            ->where('status', '!=', 'rejected')
+            ->whereNotIn('status', [self::STATUS_REJECTED, self::STATUS_COMPLETED])
             ->where('id', '!=', $excludeId)
             ->where(function ($q) use ($startTime, $endTime) {
-                // Overlapping time check
                 $q->where(function ($inner) use ($startTime, $endTime) {
                     $inner->where('start_time', '<', $endTime)
                         ->where('end_time', '>', $startTime);
@@ -85,14 +95,77 @@ class VenueBooking extends Model
 
     public function isPending(): bool
     {
-        return $this->status === 'pending';
+        return $this->status === self::STATUS_PENDING;
     }
+
+    public function isPendingApproval(): bool
+    {
+        return $this->status === self::STATUS_PENDING_APPROVAL;
+    }
+
+    public function isPendingSignature(): bool
+    {
+        return $this->status === self::STATUS_PENDING_SIGNATURE;
+    }
+
     public function isApproved(): bool
     {
-        return $this->status === 'approved';
+        return $this->status === self::STATUS_APPROVED;
     }
+
     public function isRejected(): bool
     {
-        return $this->status === 'rejected';
+        return $this->status === self::STATUS_REJECTED;
+    }
+
+    public function isCompleted(): bool
+    {
+        return $this->status === self::STATUS_COMPLETED;
+    }
+
+    public function getDurationAttribute(): string
+    {
+        $start = Carbon::parse($this->start_time);
+        $end = Carbon::parse($this->end_time);
+        $diff = $start->diff($end);
+
+        $hours = $diff->h + ($diff->days * 24);
+        $mins = $diff->i;
+
+        if ($hours > 0 && $mins > 0) {
+            return "{$hours}h {$mins}min";
+        }
+        if ($hours > 0) {
+            return "{$hours}h";
+        }
+        if ($mins > 0) {
+            return "{$mins}min";
+        }
+        return '0min';
+    }
+
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->whereIn('status', [
+                self::STATUS_PENDING_APPROVAL,
+                self::STATUS_PENDING_SIGNATURE,
+                self::STATUS_APPROVED,
+            ])
+            ->where('booking_date', '>=', now()->format('Y-m-d'));
+    }
+
+    public function scopeExpired(Builder $query): Builder
+    {
+        return $query->where('booking_date', '<', now()->format('Y-m-d'))
+            ->whereIn('status', [
+                self::STATUS_PENDING_APPROVAL,
+                self::STATUS_PENDING_SIGNATURE,
+                self::STATUS_APPROVED,
+            ]);
+    }
+
+    public function scopeForVenue(Builder $query, int $venueId): Builder
+    {
+        return $query->where('venue_id', $venueId);
     }
 }

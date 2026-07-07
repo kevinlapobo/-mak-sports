@@ -26,6 +26,9 @@ class BookVenue extends Component
     public ?array $conflict = null;
     public ?string $pastDateError = null;
     public array $bookedDates = [];
+    public array $bookedSlots = [];
+    public array $selectedDateBookings = [];
+    public string $tooltipDate = '';
 
     public int $calMonth;
     public int $calYear;
@@ -50,13 +53,28 @@ class BookVenue extends Component
 
     public function loadBookedDates(): void
     {
-        $this->bookedDates = VenueBooking::where('venue_id', $this->venue->id)
-            ->whereIn('status', ['pending_approval', 'pending_signature', 'approved'])
-            ->selectRaw('DATE(booking_date) as date')
-            ->distinct()
-            ->orderBy('date')
-            ->pluck('date')
-            ->toArray();
+        $bookings = VenueBooking::forVenue($this->venue->id)
+            ->active()
+            ->orderBy('booking_date')
+            ->orderBy('start_time')
+            ->get(['id', 'booking_date', 'start_time', 'end_time', 'purpose', 'organizer_name']);
+
+        $grouped = [];
+        $dates = [];
+        foreach ($bookings as $b) {
+            $d = $b->booking_date instanceof \Carbon\Carbon ? $b->booking_date->format('Y-m-d') : $b->booking_date;
+            $dates[$d] = true;
+            $grouped[$d][] = [
+                'id' => $b->id,
+                'start' => substr($b->start_time, 0, 5),
+                'end' => substr($b->end_time, 0, 5),
+                'purpose' => $b->purpose,
+                'organizer' => $b->organizer_name,
+            ];
+        }
+
+        $this->bookedDates = array_keys($dates);
+        $this->bookedSlots = $grouped;
         $this->generateCalendar();
     }
 
@@ -81,13 +99,16 @@ class BookVenue extends Component
                 $days[$weekIdx][] = null;
             } else {
                 $ds = sprintf('%04d-%02d-%02d', $this->calYear, $this->calMonth, $dayNum);
+                $slots = $this->bookedSlots[$ds] ?? [];
                 $days[$weekIdx][] = [
                     'day' => $dayNum,
                     'date' => $ds,
                     'isPast' => $ds < $today,
                     'isToday' => $ds === $today,
-                    'isBooked' => in_array($ds, $this->bookedDates),
+                    'isBooked' => count($slots) > 0,
                     'isSelected' => $ds === $this->booking_date,
+                    'slots' => $slots,
+                    'slotCount' => count($slots),
                 ];
                 $dayNum++;
             }
@@ -129,6 +150,7 @@ class BookVenue extends Component
         }
         $this->pastDateError = null;
         $this->booking_date = $date;
+        $this->selectedDateBookings = $this->bookedSlots[$date] ?? [];
         $this->generateCalendar();
         $this->checkAvailability();
     }
