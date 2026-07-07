@@ -53,6 +53,7 @@
                 <div id="pending-actions" style="display:flex; gap:10px; margin-top:20px; justify-content:center; flex-wrap:wrap;">
                     <button id="btn-print-pending" style="display:inline-flex; align-items:center; gap:6px; background:#fff; border:1px solid #e5e7eb; padding:10px 18px; border-radius:8px; font-size:13px; font-weight:600; color:#333; cursor:pointer;">🖨️ Print Summary</button>
                     <button id="btn-download-pending" style="display:inline-flex; align-items:center; gap:6px; background:#fff; border:1px solid #e5e7eb; padding:10px 18px; border-radius:8px; font-size:13px; font-weight:600; color:#333; cursor:pointer;">📥 Download</button>
+                    <a href="{{ route('feedback.create') }}" style="display:inline-flex; align-items:center; gap:6px; background:var(--muk-green); border:none; padding:10px 18px; border-radius:8px; font-size:13px; font-weight:700; color:#fff; text-decoration:none; cursor:pointer;">💬 Send Feedback</a>
                 </div>
             </div>
         </div>

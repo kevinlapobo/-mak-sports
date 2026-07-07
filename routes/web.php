@@ -28,6 +28,8 @@ use App\Livewire\Coach\MyTeams as CoachMyTeams;
 use App\Livewire\Player\Profile as PlayerProfile;
 use App\Livewire\Facility\Approvals as FacilityApprovals;
 use App\Livewire\Facility\VenueBookings as FacilityVenueBookings;
+use App\Livewire\Feedback\Create as FeedbackCreate;
+use App\Livewire\Feedback\ManageFeedback as FeedbackManage;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\BookingPrintController;
 
@@ -64,6 +66,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/manage/pending',  PendingResults::class)->name('admin.pending-results');
     Route::get('/manage/new-teams', NewTeams::class)->name('admin.new-teams');
     Route::get('/manage/match/{id}', ManageMatch::class)->name('admin.manage-match');
+    Route::get('/manage/feedback', FeedbackManage::class)->name('feedback.manage');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/feedback', FeedbackCreate::class)->name('feedback.create');
 });
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');

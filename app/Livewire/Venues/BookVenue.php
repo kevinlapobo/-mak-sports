@@ -26,6 +26,15 @@ class BookVenue extends Component
     public ?string $pastDateError = null;
     public array $bookedDates = [];
 
+    public int $calMonth;
+    public int $calYear;
+    public array $calDays = [];
+
+    public array $monthNames = [
+        1 => 'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December',
+    ];
+
     public function mount(int $venueId): void
     {
         $this->venue = Venue::findOrFail($venueId);
@@ -33,6 +42,8 @@ class BookVenue extends Component
         $this->organizer_name = $user->full_name ?? $user->name;
         $this->organizer_email = $user->email;
         $this->organizer_phone = $user->phone ?? '';
+        $this->calMonth = (int) date('n');
+        $this->calYear = (int) date('Y');
         $this->loadBookedDates();
     }
 
@@ -45,6 +56,80 @@ class BookVenue extends Component
             ->orderBy('date')
             ->pluck('date')
             ->toArray();
+        $this->generateCalendar();
+    }
+
+    public function generateCalendar(): void
+    {
+        $firstDay = mktime(0, 0, 0, $this->calMonth, 1, $this->calYear);
+        $daysInMonth = (int) date('t', $firstDay);
+        $startWeekday = (int) date('w', $firstDay);
+        $today = date('Y-m-d');
+
+        $days = [];
+        $dayNum = 1;
+        $totalCells = (int) (ceil(($daysInMonth + $startWeekday) / 7) * 7);
+
+        for ($i = 0; $i < $totalCells; $i++) {
+            $weekIdx = (int) floor($i / 7);
+            if (!isset($days[$weekIdx])) {
+                $days[$weekIdx] = [];
+            }
+
+            if ($i < $startWeekday || $dayNum > $daysInMonth) {
+                $days[$weekIdx][] = null;
+            } else {
+                $ds = sprintf('%04d-%02d-%02d', $this->calYear, $this->calMonth, $dayNum);
+                $days[$weekIdx][] = [
+                    'day' => $dayNum,
+                    'date' => $ds,
+                    'isPast' => $ds < $today,
+                    'isToday' => $ds === $today,
+                    'isBooked' => in_array($ds, $this->bookedDates),
+                    'isSelected' => $ds === $this->booking_date,
+                ];
+                $dayNum++;
+            }
+        }
+
+        $this->calDays = $days;
+    }
+
+    public function nextMonth(): void
+    {
+        if ($this->calMonth === 12) {
+            $this->calMonth = 1;
+            $this->calYear++;
+        } else {
+            $this->calMonth++;
+        }
+        $this->generateCalendar();
+    }
+
+    public function prevMonth(): void
+    {
+        if (now()->format('Y-m') === sprintf('%04d-%02d', $this->calYear, $this->calMonth)) {
+            return;
+        }
+        if ($this->calMonth === 1) {
+            $this->calMonth = 12;
+            $this->calYear--;
+        } else {
+            $this->calMonth--;
+        }
+        $this->generateCalendar();
+    }
+
+    public function selectDate(string $date): void
+    {
+        if ($date < date('Y-m-d')) {
+            $this->pastDateError = 'You cannot select a date in the past. Please choose today or a future date.';
+            return;
+        }
+        $this->pastDateError = null;
+        $this->booking_date = $date;
+        $this->generateCalendar();
+        $this->checkAvailability();
     }
 
     public function checkAvailability(): void
@@ -68,6 +153,7 @@ class BookVenue extends Component
 
     public function updatedBookingDate(): void
     {
+        $this->generateCalendar();
         $this->checkAvailability();
     }
     public function updatedStartTime(): void

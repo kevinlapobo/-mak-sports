@@ -71,21 +71,75 @@
                     <textarea wire:model="description" rows="2" placeholder="Additional details..." style="width:100%; padding:10px 12px; border:1px solid #e5e7eb; border-radius:8px; font-size:14px; resize:vertical;"></textarea>
                 </div>
 
-                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:8px;">
-                    <div>
-                        <label style="font-size:13px; font-weight:600; color:#333; display:block; margin-bottom:4px;">Date <span style="color:var(--muk-red);">*</span></label>
-                        <input type="date" wire:model.live="booking_date" min="{{ date('Y-m-d') }}" required style="width:100%; padding:10px 12px; border:1px solid {{ $conflict || $pastDateError ? 'var(--muk-red)' : '#e5e7eb' }}; border-radius:8px; font-size:14px;">
-                        @if(!empty($bookedDates))
-                        <div style="margin-top:8px; font-size:12px; color:#888;">
-                            <strong>📅 Booked dates:</strong>
-                            <div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:4px;">
-                                @foreach($bookedDates as $d)
-                                <span style="background:#fef2f2; color:var(--muk-red); padding:2px 8px; border-radius:4px; font-size:11px; font-weight:600;">{{ \Carbon\Carbon::parse($d)->format('d M') }}</span>
+                <div style="margin-bottom:16px;">
+                    <label style="font-size:14px; font-weight:700; color:#333; display:block; margin-bottom:8px;">📅 Select Date <span style="color:var(--muk-red);">*</span></label>
+
+                    {{-- Calendar Widget --}}
+                    <div style="background:#fff; border:2px solid {{ $conflict || $pastDateError ? 'var(--muk-red)' : '#e5e7eb' }}; border-radius:12px; overflow:hidden;">
+
+                        {{-- Calendar Header --}}
+                        <div style="background:var(--muk-green); padding:12px 16px; display:flex; align-items:center; justify-content:space-between;">
+                            <button type="button" wire:click="prevMonth" style="background:rgba(255,255,255,.15); border:none; color:#fff; width:32px; height:32px; border-radius:8px; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; {{ now()->format('Y-m') === sprintf('%04d-%02d', $calYear, $calMonth) ? 'opacity:.4;cursor:not-allowed;' : '' }}" @if(now()->format('Y-m') !== sprintf('%04d-%02d', $calYear, $calMonth)) wire:click="prevMonth" @endif>‹</button>
+                            <span style="color:#fff; font-size:15px; font-weight:800;">{{ $monthNames[$calMonth] }} {{ $calYear }}</span>
+                            <button type="button" wire:click="nextMonth" style="background:rgba(255,255,255,.15); border:none; color:#fff; width:32px; height:32px; border-radius:8px; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center;">›</button>
+                        </div>
+
+                        {{-- Weekday Headers --}}
+                        <div style="display:grid; grid-template-columns:repeat(7,1fr); background:#f0fdf4; border-bottom:1px solid #e5e7eb;">
+                            @foreach(['Sun','Mon','Tue','Wed','Thu','Fri','Sat'] as $wd)
+                            <div style="padding:8px 4px; text-align:center; font-size:11px; font-weight:700; color:var(--muk-green); text-transform:uppercase;">{{ $wd }}</div>
+                            @endforeach
+                        </div>
+
+                        {{-- Calendar Grid --}}
+                        <div style="padding:4px;">
+                            @foreach($calDays as $week)
+                            <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:2px; margin-bottom:2px;">
+                                @foreach($week as $cell)
+                                    @if($cell === null)
+                                        <div style="padding:8px 4px; text-align:center;"></div>
+                                    @else
+                                        @php
+                                            $isPast = $cell['isPast'];
+                                            $isToday = $cell['isToday'];
+                                            $isBooked = $cell['isBooked'];
+                                            $isSelected = $cell['isSelected'];
+                                            $dateStr = $cell['date'];
+                                        @endphp
+                                        <button type="button"
+                                            wire:click="selectDate('{{ $dateStr }}')"
+                                            @if($isPast) disabled @endif
+                                            style="
+                                                width:100%; padding:8px 2px; text-align:center; border:none; border-radius:8px; cursor:{{ $isPast ? 'not-allowed' : 'pointer' }};
+                                                font-size:13px; font-weight:{{ $isToday || $isSelected ? '800' : '600' }};
+                                                position:relative; transition:all .1s;
+                                                background:{{ $isSelected ? 'var(--muk-green)' : ($isToday ? 'rgba(255,193,7,.25)' : ($isPast ? '#f9fafb' : '#fff')) }};
+                                                color:{{ $isSelected ? '#fff' : ($isPast ? '#ccc' : ($isToday ? '#92400e' : '#333')) }};
+                                            "
+                                            onmouseover="this.style.background='{{ $isPast ? '#f9fafb' : ($isSelected ? 'var(--muk-green-dark)' : 'rgba(40,167,69,.1)') }}'"
+                                            onmouseout="this.style.background='{{ $isSelected ? 'var(--muk-green)' : ($isToday ? 'rgba(255,193,7,.25)' : ($isPast ? '#f9fafb' : '#fff')) }}'"
+                                        >
+                                            {{ $cell['day'] }}
+                                            @if($isBooked)
+                                                <span style="position:absolute; bottom:2px; left:50%; transform:translateX(-50%); width:5px; height:5px; border-radius:50%; background:var(--muk-red); display:block;"></span>
+                                            @endif
+                                        </button>
+                                    @endif
                                 @endforeach
                             </div>
+                            @endforeach
                         </div>
-                        @endif
+
+                        {{-- Legend --}}
+                        <div style="padding:8px 16px; border-top:1px solid #f0f0f0; display:flex; gap:16px; font-size:11px; color:#888;">
+                            <span><span style="display:inline-block; width:10px; height:10px; border-radius:2px; background:var(--muk-green); margin-right:4px; vertical-align:middle;"></span> Selected</span>
+                            <span><span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--muk-red); margin-right:4px; vertical-align:middle;"></span> Booked</span>
+                            <span><span style="display:inline-block; width:10px; height:10px; border-radius:2px; background:rgba(255,193,7,.4); margin-right:4px; vertical-align:middle;"></span> Today</span>
+                        </div>
                     </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
                     <div>
                         <label style="font-size:13px; font-weight:600; color:#333; display:block; margin-bottom:4px;">Start Time <span style="color:var(--muk-red);">*</span></label>
                         <input type="time" wire:model.live="start_time" required style="width:100%; padding:10px 12px; border:1px solid {{ $conflict ? 'var(--muk-red)' : '#e5e7eb' }}; border-radius:8px; font-size:14px;">

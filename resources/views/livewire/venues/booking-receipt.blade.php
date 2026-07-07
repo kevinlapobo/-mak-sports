@@ -85,6 +85,7 @@
         <div id="receipt-actions" style="display:flex; gap:10px; margin-top:20px; flex-wrap:wrap;">
             <button id="btn-print-receipt" style="display:inline-flex; align-items:center; gap:6px; background:#fff; border:1px solid #e5e7eb; padding:10px 18px; border-radius:8px; font-size:13px; font-weight:600; color:#333; cursor:pointer;">🖨️ Print Receipt</button>
             <button id="btn-download-receipt" style="display:inline-flex; align-items:center; gap:6px; background:#fff; border:1px solid #e5e7eb; padding:10px 18px; border-radius:8px; font-size:13px; font-weight:600; color:#333; cursor:pointer;">📥 Download</button>
+            <a href="{{ route('feedback.create') }}" style="display:inline-flex; align-items:center; gap:6px; background:var(--muk-green); border:none; padding:10px 18px; border-radius:8px; font-size:13px; font-weight:700; color:#fff; text-decoration:none; cursor:pointer;">💬 Send Feedback</a>
         </div>
 
         <div id="toast-receipt" style="display:none; position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:var(--muk-green); color:#fff; padding:12px 24px; border-radius:10px; font-size:14px; font-weight:600; z-index:9999; box-shadow:0 8px 24px rgba(0,0,0,.25); transition:opacity .3s;"></div>
