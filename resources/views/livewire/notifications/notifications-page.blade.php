@@ -25,21 +25,45 @@
 
         <div style="background:#fff; border-radius:12px; border:1px solid #e5e7eb; overflow:hidden;">
             @forelse($notifications as $notification)
-                @php $data = $notification->data; @endphp
+                @php
+                    $data = $notification->data;
+                    $type = $data['type'] ?? 'unknown';
+                    $icon = match($type) {
+                        'new_result' => '⚽',
+                        'new_fixture' => '📅',
+                        'booking_status' => '🏟',
+                        'account_approved' => '✅',
+                        default => '🔔',
+                    };
+                    $bgColor = match($type) {
+                        'new_result' => '#fef3c7',
+                        'new_fixture' => '#dbeafe',
+                        'booking_status' => '#f0fdf4',
+                        'account_approved' => '#e0f2fe',
+                        default => '#f3f4f6',
+                    };
+                @endphp
                 <div style="padding:16px 20px; border-bottom:1px solid #f0f0f0; display:flex; align-items:flex-start; gap:14px; {{ $notification->read_at ? '' : 'background:#f0fdf4;' }} cursor:pointer;" wire:click="markAsRead('{{ $notification->id }}')">
-                    <div style="flex-shrink:0; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; {{ $data['type'] === 'new_result' ? 'background:#fef3c7;' : 'background:#e8f5ee;' }}">
-                        {{ $data['type'] === 'new_result' ? '⚽' : '📅' }}
+                    <div style="flex-shrink:0; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; background:{{ $bgColor }};">
+                        {{ $icon }}
                     </div>
                     <div style="flex:1; min-width:0;">
-                        <div style="font-size:14px; font-weight:700; color:#111; margin-bottom:2px;">{{ $data['title'] }}</div>
-                        <div style="font-size:13px; color:#555; line-height:1.4;">{{ $data['message'] }}</div>
-                        @if(isset($data['competition']))
+                        <div style="font-size:14px; font-weight:700; color:#111; margin-bottom:2px;">{{ $data['title'] ?? 'Notification' }}</div>
+                        <div style="font-size:13px; color:#555; line-height:1.4;">{{ $data['message'] ?? '' }}</div>
+                        @if(!empty($data['competition']))
                             <div style="font-size:11px; color:#888; margin-top:2px;">{{ $data['competition'] }}</div>
+                        @endif
+                        @if(!empty($data['reference_number']))
+                            <div style="font-size:11px; color:var(--muk-green); margin-top:2px; font-weight:600;">Ref: {{ $data['reference_number'] }}</div>
                         @endif
                         <div style="font-size:11px; color:#aaa; margin-top:4px;">{{ $notification->created_at->diffForHumans() }}</div>
                     </div>
-                    <div style="display:flex; gap:4px; flex-shrink:0;">
-                        <a href="{{ route('match.detail', $data['match_id']) }}" style="padding:6px 12px; background:var(--muk-green); color:#fff; border:none; border-radius:6px; font-size:11px; font-weight:700; text-decoration:none; white-space:nowrap;">View</a>
+                    <div style="display:flex; gap:4px; flex-shrink:0; align-items:flex-start;">
+                        @if(!empty($data['match_id']))
+                            <a href="{{ route('match.detail', $data['match_id']) }}" style="padding:6px 12px; background:var(--muk-green); color:#fff; border:none; border-radius:6px; font-size:11px; font-weight:700; text-decoration:none; white-space:nowrap;">View</a>
+                        @elseif(!empty($data['booking_id']))
+                            <a href="{{ $data['status'] === 'pending_signature' ? route('venue.receipt', $data['booking_id']) : route('venue.pending', $data['booking_id']) }}" style="padding:6px 12px; background:var(--muk-green); color:#fff; border:none; border-radius:6px; font-size:11px; font-weight:700; text-decoration:none; white-space:nowrap;">View</a>
+                        @endif
                         <button wire:click="deleteNotification('{{ $notification->id }}')" wire:loading.attr="disabled" style="padding:6px 8px; background:transparent; border:none; color:#ccc; cursor:pointer; font-size:14px; display:inline-flex; align-items:center; justify-content:center;" title="Delete">
     <span wire:loading.remove wire:target="deleteNotification('{{ $notification->id }}')">✕</span>
     <span wire:loading wire:target="deleteNotification('{{ $notification->id }}')" style="display:flex; align-items:center; gap:4px;"><span style="width:12px;height:12px;border:2px solid #ccc;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite;display:inline-block;"></span></span>
