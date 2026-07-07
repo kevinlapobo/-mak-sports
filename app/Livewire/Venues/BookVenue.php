@@ -23,6 +23,8 @@ class BookVenue extends Component
     public string $end_time = '';
     public string $booking_type = 'immediate';
     public ?array $conflict = null;
+    public ?string $pastDateError = null;
+    public array $bookedDates = [];
 
     public function mount(int $venueId): void
     {
@@ -31,11 +33,32 @@ class BookVenue extends Component
         $this->organizer_name = $user->full_name ?? $user->name;
         $this->organizer_email = $user->email;
         $this->organizer_phone = $user->phone ?? '';
+        $this->loadBookedDates();
+    }
+
+    public function loadBookedDates(): void
+    {
+        $this->bookedDates = VenueBooking::where('venue_id', $this->venue->id)
+            ->whereIn('status', ['pending_approval', 'pending_signature', 'approved'])
+            ->selectRaw('DATE(booking_date) as date')
+            ->distinct()
+            ->orderBy('date')
+            ->pluck('date')
+            ->toArray();
     }
 
     public function checkAvailability(): void
     {
         $this->conflict = null;
+        $this->pastDateError = null;
+
+        if ($this->booking_date) {
+            if ($this->booking_date < date('Y-m-d')) {
+                $this->pastDateError = 'You cannot select a date in the past. Please choose today or a future date.';
+                return;
+            }
+        }
+
         if ($this->booking_date && $this->start_time && $this->end_time) {
             if (VenueBooking::hasConflict($this->venue->id, $this->booking_date, $this->start_time, $this->end_time)) {
                 $this->conflict = ['message' => 'This venue is already booked during this time. Please choose a different date or time slot.'];

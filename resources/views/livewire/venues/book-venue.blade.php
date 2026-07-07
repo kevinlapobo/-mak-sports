@@ -12,6 +12,13 @@
                 <p style="color:rgba(255,255,255,.7); font-size:13px; margin:4px 0 0;">{{ $venue->location }} • Capacity: {{ $venue->capacity }}</p>
             </div>
 
+            @if($pastDateError)
+            <div style="background:#fef2f2; border-left:4px solid var(--muk-red); padding:16px 20px; margin:16px; border-radius:0 8px 8px 0;">
+                <div style="font-size:14px; font-weight:700; color:var(--muk-red);">⚠️ Invalid Date</div>
+                <div style="font-size:13px; color:#333; margin-top:4px;">{{ $pastDateError }}</div>
+            </div>
+            @endif
+
             @if($conflict)
             <div style="background:#fef2f2; border-left:4px solid var(--muk-red); padding:16px 20px; margin:16px; border-radius:0 8px 8px 0;">
                 <div style="font-size:14px; font-weight:700; color:var(--muk-red);">⚠️ Venue Already Booked</div>
@@ -64,10 +71,20 @@
                     <textarea wire:model="description" rows="2" placeholder="Additional details..." style="width:100%; padding:10px 12px; border:1px solid #e5e7eb; border-radius:8px; font-size:14px; resize:vertical;"></textarea>
                 </div>
 
-                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:16px;">
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:8px;">
                     <div>
                         <label style="font-size:13px; font-weight:600; color:#333; display:block; margin-bottom:4px;">Date <span style="color:var(--muk-red);">*</span></label>
-                        <input type="date" wire:model.live="booking_date" min="{{ date('Y-m-d') }}" required style="width:100%; padding:10px 12px; border:1px solid {{ $conflict ? 'var(--muk-red)' : '#e5e7eb' }}; border-radius:8px; font-size:14px;">
+                        <input type="date" wire:model.live="booking_date" min="{{ date('Y-m-d') }}" required style="width:100%; padding:10px 12px; border:1px solid {{ $conflict || $pastDateError ? 'var(--muk-red)' : '#e5e7eb' }}; border-radius:8px; font-size:14px;">
+                        @if(!empty($bookedDates))
+                        <div style="margin-top:8px; font-size:12px; color:#888;">
+                            <strong>📅 Booked dates:</strong>
+                            <div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:4px;">
+                                @foreach($bookedDates as $d)
+                                <span style="background:#fef2f2; color:var(--muk-red); padding:2px 8px; border-radius:4px; font-size:11px; font-weight:600;">{{ \Carbon\Carbon::parse($d)->format('d M') }}</span>
+                                @endforeach
+                            </div>
+                        </div>
+                        @endif
                     </div>
                     <div>
                         <label style="font-size:13px; font-weight:600; color:#333; display:block; margin-bottom:4px;">Start Time <span style="color:var(--muk-red);">*</span></label>

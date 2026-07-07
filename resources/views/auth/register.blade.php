@@ -1,5 +1,5 @@
 <x-layouts.auth :title="'Register'" :heading="'Join Makerere Sports'" :subheading="'Create your account to access personalized sports content'">
-    <form class="space-y-5" method="POST" action="{{ route('register.post') }}" enctype="multipart/form-data">
+    <form class="space-y-5" method="POST" action="{{ route('register.post') }}">
         @csrf
 
         @if($errors->any())
@@ -33,50 +33,11 @@
         </div>
 
         <div>
-            <label for="role" class="block text-sm font-semibold text-gray-700">I am a <span class="text-red-500">*</span></label>
-            <select id="role" name="role" required
-                class="mt-1 block w-full px-3 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#28A745] focus:border-transparent"
-                onchange="toggleRoleFields()">
-                <option value="">Select your role...</option>
-                <option value="student" {{ old('role') === 'student' ? 'selected' : '' }}>Student - View results, standings & upcoming matches</option>
-                <option value="player" {{ old('role') === 'player' ? 'selected' : '' }}>Player - Track your stats & performance</option>
-                <option value="coach" {{ old('role') === 'coach' ? 'selected' : '' }}>Coach - Manage team & view competitions</option>
-            </select>
-        </div>
-
-        <div id="studentNumberField" class="hidden">
-            <label for="student_number" class="block text-sm font-semibold text-gray-700">Student Number <span class="text-red-500">*</span></label>
+            <label for="student_number" class="block text-sm font-semibold text-gray-700">Student Number (optional)</label>
             <input id="student_number" name="student_number" type="text"
                 class="mt-1 appearance-none block w-full px-3 py-2.5 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#28A745] focus:border-transparent"
                 value="{{ old('student_number') }}"
                 placeholder="e.g. S22B13/001">
-        </div>
-
-        <div id="photoField" class="hidden">
-            <label for="photo" class="block text-sm font-semibold text-gray-700">Profile Photo</label>
-            <div class="mt-1 flex items-center gap-4">
-                <div id="photoPreview" style="width:56px; height:56px; border-radius:50%; background:#e5e7eb; display:flex; align-items:center; justify-content:center; font-size:20px; color:#888; overflow:hidden; flex-shrink:0; border:2px solid #e5e7eb;">
-                    📷
-                </div>
-                <label class="cursor-pointer bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
-                    Choose Photo
-                    <input id="photo" name="photo" type="file" accept="image/jpeg,image/png" class="hidden" onchange="previewPhoto(event)">
-                </label>
-            </div>
-            <p class="mt-1 text-xs text-gray-500">JPEG or PNG, max 2MB</p>
-        </div>
-
-        <div id="teamField" class="hidden">
-            <label for="team_id" class="block text-sm font-semibold text-gray-700">Your Team <span class="text-red-500">*</span></label>
-            <select id="team_id" name="team_id"
-                class="mt-1 block w-full px-3 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#28A745] focus:border-transparent">
-                <option value="">Select your team...</option>
-                @if(isset($teams))
-                    @foreach($teams as $team)
-                        <option value="{{ $team->id }}">{{ $team->name }} ({{ $team->sport->name ?? 'N/A' }})</option>
-                    @endforeach
-                @endif
-            </select>
         </div>
 
         <div>
@@ -148,37 +109,5 @@
                 eyeClosed.classList.add('hidden');
             }
         }
-
-        function toggleRoleFields() {
-            const role = document.getElementById('role').value;
-            const teamField = document.getElementById('teamField');
-            const studentNumberField = document.getElementById('studentNumberField');
-            const photoField = document.getElementById('photoField');
-            if (role === 'player' || role === 'coach') {
-                teamField.classList.remove('hidden');
-                photoField.classList.remove('hidden');
-            } else {
-                teamField.classList.add('hidden');
-                photoField.classList.add('hidden');
-            }
-            if (role === 'student') {
-                studentNumberField.classList.remove('hidden');
-            } else {
-                studentNumberField.classList.add('hidden');
-            }
-        }
-        function previewPhoto(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const preview = document.getElementById('photoPreview');
-                    preview.innerHTML = '<img src="'+e.target.result+'" style="width:100%;height:100%;object-fit:cover;">';
-                    preview.style.background = 'none';
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-        document.addEventListener('DOMContentLoaded', toggleRoleFields);
     </script>
 </x-layouts.auth>

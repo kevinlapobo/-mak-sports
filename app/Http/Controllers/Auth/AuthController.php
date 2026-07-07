@@ -39,8 +39,7 @@ class AuthController extends Controller
 
     public function showRegisterForm()
     {
-        $teams = \App\Models\Team::where('is_active', true)->orderBy('name')->get();
-        return view('auth.register', compact('teams'));
+        return view('auth.register');
     }
 
     public function register(Request $request)
@@ -53,31 +52,19 @@ class AuthController extends Controller
                 }
             }],
             'password' => ['required', 'confirmed', Password::defaults()],
-            'role' => ['required', 'in:student,player,coach'],
             'phone' => ['nullable', 'string', 'max:20'],
-            'team_id' => ['nullable', 'exists:teams,id'],
             'student_number' => ['nullable', 'string', 'max:50'],
-            'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
         ]);
-
-        $photoPath = null;
-        if ($request->hasFile('photo')) {
-            $photoPath = $request->file('photo')->store('photos', 'public');
-        }
-
-        $status = in_array($validated['role'], ['player', 'coach']) ? 'pending' : 'approved';
 
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'role' => $validated['role'],
+            'role' => 'student',
             'full_name' => $validated['name'],
             'phone' => $validated['phone'] ?? null,
-            'team_id' => $validated['team_id'] ?? null,
             'student_number' => $validated['student_number'] ?? null,
-            'photo' => $photoPath,
-            'status' => $status,
+            'status' => 'approved',
         ]);
 
         Auth::login($user);

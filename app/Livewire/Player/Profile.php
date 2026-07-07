@@ -54,6 +54,7 @@ class Profile extends Component
         ];
 
         if ($this->newPhoto) {
+            //delete old photo
             if ($this->user->photo) {
                 Storage::disk('public')->delete($this->user->photo);
             }

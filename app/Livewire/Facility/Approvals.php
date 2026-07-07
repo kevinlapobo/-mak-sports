@@ -3,6 +3,7 @@
 namespace App\Livewire\Facility;
 
 use App\Models\User;
+use App\Notifications\AccountApprovedNotification;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -25,6 +26,7 @@ class Approvals extends Component
     {
         $user = User::findOrFail($userId);
         $user->update(['status' => 'approved']);
+        $user->notify(new AccountApprovedNotification($user));
         session()->flash('success', "{$user->name} approved as {$user->role}.");
     }
 
