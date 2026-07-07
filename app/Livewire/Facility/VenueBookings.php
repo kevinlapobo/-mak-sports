@@ -3,6 +3,7 @@
 namespace App\Livewire\Facility;
 
 use App\Models\VenueBooking;
+use App\Notifications\BookingStatusNotification;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -23,6 +24,7 @@ class VenueBookings extends Component
             'approved_by' => auth()->id(),
             'approved_at' => now(),
         ]);
+        $booking->user->notify(new BookingStatusNotification($booking, 'approved'));
         session()->flash('success', "Booking {$booking->reference_number} approved.");
     }
 
@@ -41,6 +43,7 @@ class VenueBookings extends Component
             'status' => 'rejected',
             'rejection_reason' => $this->rejectionReason,
         ]);
+        $booking->user->notify(new BookingStatusNotification($booking, 'rejected'));
 
         $this->rejectBookingId = '';
         $this->rejectionReason = '';

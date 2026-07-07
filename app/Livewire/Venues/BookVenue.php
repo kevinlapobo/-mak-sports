@@ -4,6 +4,7 @@ namespace App\Livewire\Venues;
 
 use App\Models\Venue;
 use App\Models\VenueBooking;
+use App\Notifications\BookingStatusNotification;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 
@@ -196,6 +197,8 @@ class BookVenue extends Component
             'end_time' => $this->end_time,
             'status' => $this->booking_type === 'immediate' ? 'pending_signature' : 'pending_approval',
         ]);
+
+        Auth::user()->notify(new BookingStatusNotification($booking, $booking->status));
 
         if ($this->booking_type === 'immediate') {
             $this->redirectRoute('venue.receipt', $booking->id, navigate: true);
