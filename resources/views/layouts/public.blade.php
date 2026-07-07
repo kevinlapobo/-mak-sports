@@ -760,12 +760,12 @@
                    class="nav-link {{ request()->routeIs('standings') ? 'active' : '' }}">
                    Standings
                 </a>
+                <a href="{{ route('venues.index') }}"
+                   class="nav-link {{ request()->routeIs('venue.*') ? 'active' : '' }}"
+                   style="background:rgba(204,0,0,.8); color:#fff;">
+                   🏟 Book Venue
+                </a>
                 @if(auth()->user()->role === 'coach')
-                    <a href="{{ route('venues.index') }}"
-                       class="nav-link {{ request()->routeIs('venue.*') ? 'active' : '' }}"
-                       style="background:rgba(204,0,0,.8); color:#fff;">
-                       🏟 Book Venue
-                    </a>
                     <a href="{{ route('coach.my-teams') }}"
                        class="nav-link {{ request()->routeIs('coach.my-teams') ? 'active' : '' }}">
                        My Teams
@@ -882,8 +882,8 @@
         @auth
             <a href="{{ route('live') }}" class="nav-link live-link">● LIVE</a>
             <a href="{{ route('standings') }}" class="nav-link">Standings</a>
+            <a href="{{ route('venues.index') }}" class="nav-link" style="background:var(--muk-red); color:#fff;">🏟 Book Venue</a>
             @if(auth()->user()->role === 'coach')
-                <a href="{{ route('venues.index') }}" class="nav-link" style="background:var(--muk-red); color:#fff;">🏟 Book Venue</a>
                 <a href="{{ route('coach.my-teams') }}" class="nav-link">My Teams</a>
                 <a href="{{ route('coach.profile') }}" class="nav-link">Profile</a>
                 <a href="{{ route('coach.stats') }}" class="nav-link">My Stats</a>
